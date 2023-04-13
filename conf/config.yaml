@@ -1,0 +1,27 @@
+app:
+  name: "web_app"
+  mode: "dev"
+  port: 8081
+
+log:
+  level: "info"
+  filename: "./web_app.log"
+  max_size: 100
+  max_age: 30
+  max_backups: 7
+
+database:
+  mysql:
+    host: "192.168.1.20"
+    port: 3306
+    user: "admin"
+    password: "sinfotek"
+    dbname: "sinfotek"
+    max_idle_conns: 20
+    max_conns: 100
+  redis:
+    host: "192.168.1.21"
+    port: 9736
+    password: "sinfotek"
+    dbname: 6
+    pool_size: 100
