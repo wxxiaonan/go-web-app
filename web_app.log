@@ -1,0 +1,13 @@
+{"level":"error","ts":"2023-04-14T10:46:00.655+0800","caller":"mysql/mysql.go:24","msg":"connect to db failed","error":"dial tcp :0: connectex: The requested address is not valid in its context."}
+{"level":"error","ts":"2023-04-14T10:48:08.340+0800","caller":"mysql/mysql.go:26","msg":"connect to db failed","error":"dial tcp :0: connectex: The requested address is not valid in its context."}
+{"level":"error","ts":"2023-04-14T10:52:54.209+0800","caller":"mysql/mysql.go:26","msg":"connect to db failed","error":"dial tcp :0: connectex: The requested address is not valid in its context."}
+{"level":"error","ts":"2023-04-14T10:53:51.946+0800","caller":"mysql/mysql.go:26","msg":"connect to db failed","error":"dial tcp :0: connectex: The requested address is not valid in its context."}
+{"level":"error","ts":"2023-04-14T10:54:06.881+0800","caller":"mysql/mysql.go:26","msg":"connect to db failed","error":"dial tcp 192.168.1.20:0: connectex: The requested address is not valid in its context."}
+{"level":"error","ts":"2023-04-14T10:54:45.849+0800","caller":"redis/redis.go:25","msg":"connect to rdb failed","error":"dial tcp 192.168.1.21:0: connectex: The requested address is not valid in its context."}
+{"level":"info","ts":"2023-04-14T10:55:07.892+0800","caller":"go-web-app/main.go:79","msg":"Shutdown Server ..."}
+{"level":"info","ts":"2023-04-14T10:55:07.904+0800","caller":"go-web-app/main.go:88","msg":"Server exiting"}
+{"level":"info","ts":"2023-04-14T10:57:39.420+0800","caller":"go-web-app/main.go:79","msg":"Shutdown Server ..."}
+{"level":"info","ts":"2023-04-14T10:57:39.433+0800","caller":"go-web-app/main.go:88","msg":"Server exiting"}
+{"level":"error","ts":"2023-04-14T10:57:44.606+0800","caller":"mysql/mysql.go:23","msg":"connect to db failed","error":"dial tcp :0: connectex: The requested address is not valid in its context."}
+{"level":"info","ts":"2023-04-14T10:58:21.066+0800","caller":"go-web-app/main.go:79","msg":"Shutdown Server ..."}
+{"level":"info","ts":"2023-04-14T10:58:21.097+0800","caller":"go-web-app/main.go:88","msg":"Server exiting"}

@@ -2,6 +2,7 @@ app:
   name: "web_app"
   mode: "dev"
   port: 8081
+  version: "v0.0.1"
 
 log:
   level: "info"
@@ -9,9 +10,8 @@ log:
   max_size: 100
   max_age: 30
   max_backups: 7
-
-database:
-  mysql:
+  
+mysql:
     host: "192.168.1.20"
     port: 3306
     user: "admin"
@@ -19,7 +19,7 @@ database:
     dbname: "sinfotek"
     max_idle_conns: 20
     max_conns: 100
-  redis:
+redis:
     host: "192.168.1.21"
     port: 9736
     password: "sinfotek"

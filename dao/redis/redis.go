@@ -3,22 +3,22 @@ package redis
 import (
 	"fmt"
 	"github.com/go-redis/redis"
-	"github.com/spf13/viper"
+	"go-web-app/settings"
 	"go.uber.org/zap"
 )
 
 var rdb *redis.Client
 
-func Init() (err error) {
+func Init(cfg *settings.RedisConfig) (err error) {
 	rdb = redis.NewClient(&redis.Options{
 		Addr: fmt.Sprintf("%s:%d",
-			viper.GetString("database.redis.host"),
-			viper.GetInt("database.redis.port"),
+			cfg.Host,
+			cfg.Port,
 		),
 
-		Password: viper.GetString("database.redis.password"),
-		DB:       viper.GetInt("database.redis.dbname"),
-		PoolSize: viper.GetInt("database.redis.pool_size"),
+		Password: cfg.Password,
+		DB:       cfg.DbName,
+		PoolSize: cfg.PoolSize,
 	})
 	_, err = rdb.Ping().Result()
 	if err != nil {
