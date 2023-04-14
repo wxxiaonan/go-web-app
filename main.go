@@ -4,10 +4,10 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"github.com/spf13/viper"
 	"go-web-app/dao/mysql"
 	"go-web-app/dao/redis"
 	"go-web-app/logger"
+	"go-web-app/pkg/snowflake"
 	"go-web-app/routes"
 	"go-web-app/settings"
 	"go.uber.org/zap"
@@ -55,11 +55,17 @@ func main() {
 		return
 	}
 	redis.Close()
+
+	if err := snowflake.Init(settings.Conf.StartTime, settings.Conf.MachineId); err != nil {
+		fmt.Printf("init snowflake failed,err:%v\n", err)
+		return
+	}
+
 	//5. 注册路由
 	r := routes.Setup()
 	//6. 启动服务 （优雅关机）
 	srv := &http.Server{
-		Addr:    fmt.Sprintf(":%d", viper.GetInt("app.port")),
+		Addr:    fmt.Sprintf(":%d", settings.Conf.Port),
 		Handler: r,
 	}
 
