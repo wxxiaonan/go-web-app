@@ -22,13 +22,12 @@ import (
 // Go Web开发比较通用的脚手架模板
 
 func main() {
-	var app_configpath string
-
-	flag.StringVar(&app_configpath, "c", "", "Configuration file path")
+	var appConfigpath string
+	flag.StringVar(&appConfigpath, "c", "", "Configuration file path")
 	flag.Parse()
 	//1. 加载配置文件
 
-	if err := settings.Init(app_configpath); err != nil {
+	if err := settings.Init(appConfigpath); err != nil {
 		fmt.Printf("init settings failed, err:%v\n", err)
 		return
 	}
