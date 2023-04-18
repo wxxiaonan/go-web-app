@@ -1,12 +1,13 @@
 package controller
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"go-web-app/dao/mysql"
 	"go-web-app/logic"
 	"go-web-app/models"
 	"go.uber.org/zap"
-	"net/http"
 )
 
 func SignUpHandler(c *gin.Context) {
@@ -17,28 +18,25 @@ func SignUpHandler(c *gin.Context) {
 		zap.L().Error("SingUp with invalid param", zap.Error(err))
 		errs, ok := err.(validator.ValidationErrors)
 		if !ok {
-			c.JSON(http.StatusOK, gin.H{
-				"msg": err.Error(),
-			})
+			ResopnseError(c, CodeInvalidParam)
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{
-			"msg": removeTopStruct(errs.Translate(trans)),
-		})
+		ResponseErrorwithMsg(c, CodeInvalidParam, removeTopStruct(errs.Translate(trans)))
 		return
 	}
 	//2.业务处理
 	if err := logic.SignUp(p); err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"msg": err.Error(),
-		})
+		zap.L().Error("logic.SignUp failed", zap.Error(err))
+		if errors.Is(err, mysql.ErrorUserExist) {
+			ResopnseError(c, CodeUserExist)
+			return
+		}
+		ResopnseError(c, CodeServerBusy)
 		return
 	}
 
 	//3.返回响应
-	c.JSON(http.StatusOK, gin.H{
-		"msg": "注册成功",
-	})
+	ResopnseSuccess(c, nil)
 }
 
 func LoginHandler(c *gin.Context) {
@@ -48,29 +46,27 @@ func LoginHandler(c *gin.Context) {
 	p := new(models.ParamLogin)
 	if err := c.ShouldBindJSON(&p); err != nil {
 		//请求参数有误,直接返回响应
-		zap.L().Error("SingUp with invalid param", zap.Error(err), zap.String("username", p.Username))
 
 		errs, ok := err.(validator.ValidationErrors)
 		if !ok {
-			c.JSON(http.StatusOK, gin.H{
-				"msg": err.Error(),
-			})
+			ResopnseError(c, CodeInvalidParam)
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{
-			"msg": removeTopStruct(errs.Translate(trans)),
-		})
+		ResponseErrorwithMsg(c, CodeInvalidParam, removeTopStruct(errs.Translate(trans)))
 		return
 	}
 	if err := logic.Login(p); err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"msg": err.Error(),
-		})
+		zap.L().Error("SingUp with invalid param", zap.String("username", p.Username), zap.Error(err))
+		if errors.Is(err, mysql.ErrorUserNoExist) {
+			ResopnseError(c, CodeUserNotExist)
+			return
+		}
+		ResopnseError(c, CodeInvalidPassword)
+
 		return
 	}
 
 	//3.返回响应
-	c.JSON(http.StatusOK, gin.H{
-		"msg": "登陆成功",
-	})
+
+	ResopnseSuccess(c, nil)
 }

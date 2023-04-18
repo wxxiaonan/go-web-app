@@ -196,3 +196,16 @@
 {"level":"info","ts":"2023-04-18T09:06:46.293+0800","caller":"go-web-app/main.go:93","msg":"Shutdown Server ..."}
 {"level":"info","ts":"2023-04-18T09:06:46.543+0800","caller":"go-web-app/main.go:102","msg":"Server exiting"}
 {"level":"error","ts":"2023-04-18T09:06:46.648+0800","caller":"go-web-app/main.go:42","msg":"L.Sync failed..."}
+{"level":"error","ts":"2023-04-18T10:11:48.332+0800","caller":"controller/user.go:59","msg":"SingUp with invalid param","username":"jjjj","error":"用户不存在"}
+{"level":"info","ts":"2023-04-18T10:11:48.333+0800","caller":"logger/logger.go:58","msg":"/login","status":200,"method":"POST","path":"/login","query":"","ip":"192.168.0.117","user-agent":"PostmanRuntime/7.32.2","errors":"","cost":0.0029435}
+{"level":"info","ts":"2023-04-18T10:12:50.669+0800","caller":"logger/logger.go:58","msg":"/login","status":200,"method":"POST","path":"/login","query":"","ip":"192.168.0.117","user-agent":"PostmanRuntime/7.32.2","errors":"","cost":0.0021415}
+{"level":"error","ts":"2023-04-18T10:12:58.582+0800","caller":"controller/user.go:29","msg":"logic.SignUp failed","error":"用户已存在"}
+{"level":"info","ts":"2023-04-18T10:12:58.582+0800","caller":"logger/logger.go:58","msg":"/signup","status":200,"method":"POST","path":"/signup","query":"","ip":"192.168.0.117","user-agent":"PostmanRuntime/7.32.2","errors":"","cost":0.0017822}
+{"level":"error","ts":"2023-04-18T10:13:08.645+0800","caller":"controller/user.go:18","msg":"SingUp with invalid param","error":"Key: 'ParamSignUp.re_password' Error:Field validation for 're_password' failed on the 'eqfield' tag\nKey: 'ParamSignUp.re_password' Error:Field validation for 're_password' failed on the 'eqfield' tag"}
+{"level":"info","ts":"2023-04-18T10:13:08.646+0800","caller":"logger/logger.go:58","msg":"/signup","status":200,"method":"POST","path":"/signup","query":"","ip":"192.168.0.117","user-agent":"PostmanRuntime/7.32.2","errors":"","cost":0.0006564}
+{"level":"error","ts":"2023-04-18T10:13:21.068+0800","caller":"controller/user.go:29","msg":"logic.SignUp failed","error":"用户已存在"}
+{"level":"info","ts":"2023-04-18T10:13:21.068+0800","caller":"logger/logger.go:58","msg":"/signup","status":200,"method":"POST","path":"/signup","query":"","ip":"192.168.0.117","user-agent":"PostmanRuntime/7.32.2","errors":"","cost":0.0016211}
+{"level":"info","ts":"2023-04-18T10:13:25.429+0800","caller":"logger/logger.go:58","msg":"/login","status":200,"method":"POST","path":"/login","query":"","ip":"192.168.0.117","user-agent":"PostmanRuntime/7.32.2","errors":"","cost":0.0012078}
+{"level":"info","ts":"2023-04-18T10:20:22.808+0800","caller":"go-web-app/main.go:93","msg":"Shutdown Server ..."}
+{"level":"info","ts":"2023-04-18T10:20:22.808+0800","caller":"go-web-app/main.go:102","msg":"Server exiting"}
+{"level":"error","ts":"2023-04-18T10:20:22.808+0800","caller":"go-web-app/main.go:42","msg":"L.Sync failed..."}
