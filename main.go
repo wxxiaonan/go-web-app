@@ -4,14 +4,14 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"go-web-app/controller"
 	"go-web-app/dao/mysql"
 	"go-web-app/dao/redis"
 	"go-web-app/logger"
 	"go-web-app/pkg/snowflake"
-	"go-web-app/routes"
+	"go-web-app/router"
 	"go-web-app/settings"
 	"go.uber.org/zap"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -32,7 +32,7 @@ func main() {
 		return
 	}
 	//2. 初始化日志
-	if err := logger.Init(settings.Conf.LogConfig); err != nil {
+	if err := logger.Init(settings.Conf.LogConfig, settings.Conf.Mode); err != nil {
 		fmt.Printf("init logger failed, err:%v\n", err)
 		return
 	}
@@ -45,24 +45,30 @@ func main() {
 	zap.L().Debug("logger init success...")
 	//3. 初始化mysql
 	if err := mysql.Init(settings.Conf.MySQLConfig); err != nil {
-		fmt.Printf("init mysql failed, err:%v\n", err)
+		zap.L().Error("init mysql failed, err:%v\n", zap.Error(err))
 		return
 	}
-	mysql.Close()
+	defer mysql.Close()
 	//4. 初始化redis连接
 	if err := redis.Init(settings.Conf.RedisConfig); err != nil {
-		fmt.Printf("init redis failed, err:%v\n", err)
+		zap.L().Error("init redis failed, err:%v\n", zap.Error(err))
 		return
 	}
-	redis.Close()
+	defer redis.Close()
 
 	if err := snowflake.Init(settings.Conf.StartTime, settings.Conf.MachineId); err != nil {
-		fmt.Printf("init snowflake failed,err:%v\n", err)
+		zap.L().Error("init snowflake failed,err:%v\n", zap.Error(err))
+		return
+	}
+
+	// 初始化gin框架的校验器使用的翻译器
+	if err := controller.InitTrans("zh"); err != nil {
+		zap.L().Error("init validator failed, err:%v\n", zap.Error(err))
 		return
 	}
 
 	//5. 注册路由
-	r := routes.Setup()
+	r := router.Setup(settings.Conf.Mode)
 	//6. 启动服务 （优雅关机）
 	srv := &http.Server{
 		Addr:    fmt.Sprintf(":%d", settings.Conf.Port),
@@ -72,7 +78,7 @@ func main() {
 	go func() {
 		// 开启一个goroutine启动服务
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("listen: %s\n", err)
+			zap.L().Fatal("listen: %s\n", zap.Error(err))
 		}
 	}()
 
