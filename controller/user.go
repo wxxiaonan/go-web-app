@@ -55,7 +55,8 @@ func LoginHandler(c *gin.Context) {
 		ResponseErrorwithMsg(c, CodeInvalidParam, removeTopStruct(errs.Translate(trans)))
 		return
 	}
-	if err := logic.Login(p); err != nil {
+	token, err := logic.Login(p)
+	if err != nil {
 		zap.L().Error("SingUp with invalid param", zap.String("username", p.Username), zap.Error(err))
 		if errors.Is(err, mysql.ErrorUserNoExist) {
 			ResopnseError(c, CodeUserNotExist)
@@ -65,8 +66,7 @@ func LoginHandler(c *gin.Context) {
 
 		return
 	}
-
 	//3.返回响应
 
-	ResopnseSuccess(c, nil)
+	ResopnseSuccess(c, token)
 }

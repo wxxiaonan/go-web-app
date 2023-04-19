@@ -36,7 +36,7 @@ func ResopnseSuccess(c *gin.Context, data interface{}) {
 	rd := &ResponseDate{
 		Code: CodeSuccess,
 		Msg:  CodeSuccess.Msg(),
-		Data: nil,
+		Data: data,
 	}
 	c.JSON(http.StatusOK, rd)
 }
@@ -45,8 +45,8 @@ func ResopnseSuccess(c *gin.Context, data interface{}) {
 func ResponseErrorwithMsg(c *gin.Context, code ResCode, msg interface{}) {
 	rd := &ResponseDate{
 		Code: code,
-		Msg:  msg,
-		Data: nil,
+		Msg:  code.Msg(),
+		Data: msg,
 	}
 	c.JSON(http.StatusOK, &rd)
 }
