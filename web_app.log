@@ -263,3 +263,6 @@
 {"level":"info","ts":"2023-04-18T16:24:18.910+0800","caller":"logger/logger.go:58","msg":"/login","status":200,"method":"POST","path":"/login","query":"","ip":"192.168.0.117","user-agent":"PostmanRuntime/7.32.2","errors":"","cost":0.0030399}
 {"level":"info","ts":"2023-04-18T16:28:16.858+0800","caller":"logger/logger.go:58","msg":"/ping","status":200,"method":"POST","path":"/ping","query":"","ip":"192.168.0.117","user-agent":"PostmanRuntime/7.32.2","errors":"","cost":0}
 {"level":"info","ts":"2023-04-18T16:32:28.737+0800","caller":"logger/logger.go:58","msg":"/login","status":200,"method":"POST","path":"/login","query":"","ip":"192.168.0.117","user-agent":"PostmanRuntime/7.32.2","errors":"","cost":0.0055286}
+{"level":"info","ts":"2023-04-19T10:10:31.539+0800","caller":"go-web-app/main.go:93","msg":"Shutdown Server ..."}
+{"level":"info","ts":"2023-04-19T10:10:31.540+0800","caller":"go-web-app/main.go:102","msg":"Server exiting"}
+{"level":"error","ts":"2023-04-19T10:10:31.541+0800","caller":"go-web-app/main.go:42","msg":"L.Sync failed..."}
