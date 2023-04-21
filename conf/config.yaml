@@ -4,6 +4,7 @@ port: 8081
 version: "v0.0.1"
 machine_id: 1
 start_time: "2000-05-09"
+client_url: "*"
 
 log:
   level: "info"

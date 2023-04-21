@@ -8,12 +8,13 @@ import (
 	"net/http"
 )
 
-func Setup(mode string) *gin.Engine {
+func Setup(mode, ClientUrl string) *gin.Engine {
 	if mode == "release" {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
 	r := gin.New()
+	r.Use(middlewares.Cors(ClientUrl))
 	r.Use(logger.GinLogger(), logger.GinRecovery(true))
 
 	//注册业务路由

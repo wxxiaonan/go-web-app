@@ -68,7 +68,7 @@ func main() {
 	}
 
 	//5. 注册路由
-	r := router.Setup(settings.Conf.Mode)
+	r := router.Setup(settings.Conf.Mode, settings.Conf.ClientUrl)
 	//6. 启动服务 （优雅关机）
 	srv := &http.Server{
 		Addr:    fmt.Sprintf(":%d", settings.Conf.Port),
