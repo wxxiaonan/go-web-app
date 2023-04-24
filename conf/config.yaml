@@ -14,16 +14,16 @@ log:
   max_backups: 7
 
 mysql:
-    host: "192.168.1.20"
-    port: 3306
+    host: "39.106.8.172"
+    port: 13306
     user: "admin"
     password: "sinfotek"
     dbname: "sinfotek"
     max_idle_conns: 20
     max_conns: 100
 redis:
-    host: "192.168.1.21"
-    port: 9736
+    host: "39.106.8.172"
+    port: 6379
     password: "sinfotek"
     dbname: 6
     pool_size: 100
