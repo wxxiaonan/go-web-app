@@ -25,6 +25,10 @@ func Setup(mode, ClientUrl string) *gin.Engine {
 		c.String(http.StatusOK, "pong")
 
 	})
+	r.GET("/system-view", func(c *gin.Context) {
+		c.String(http.StatusOK, "80")
+
+	})
 	r.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"msg": "404",
