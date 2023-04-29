@@ -131,8 +131,9 @@ func NetworkSentSpeed(p *models.ParamSystemGet) (s string, err error) {
 		a := strings.Replace(outstring, "\r\n", "", -1)
 		a = strings.Replace(a, " ", "", -1)
 		b, _ := strconv.ParseInt(a, 10, 64)
-		s = fmt.Sprintf("%.0f", (b/1073741824)+1)
-		return s, err
+		s := ((b / 1073741824) + 1)
+		d := strconv.FormatInt(s, 10)
+		return d, err
 	case p.Type == "sup":
 		//系统运行时间
 		Time := []string{"Days", "Hours", "Minutes", "Seconds"}
