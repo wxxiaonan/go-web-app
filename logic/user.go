@@ -4,8 +4,13 @@ import (
 	"fmt"
 	"go-web-app/dao/mysql"
 	"go-web-app/models"
+	"go-web-app/pkg/codeconversion"
 	"go-web-app/pkg/jwt"
 	"go-web-app/pkg/snowflake"
+	"math"
+	"os/exec"
+	"strconv"
+	"strings"
 )
 
 // 存放业务逻辑代码
@@ -46,5 +51,109 @@ func Login(p *models.ParamLogin) (token string, err error) {
 
 	//生成JWTtoken
 	return jwt.GenToken(user.UserId, user.Username)
+
+}
+
+func NetworkSentSpeed(p *models.ParamSystemGet) (s string, err error) {
+	switch {
+	case p.Type == "cpu":
+		//cpu使用率
+		command := " typeperf -si 1 -sc 1 \"\\Processor(_Total)\\% Processor Time\" |findstr /V \"Processor\" |findstr /V \"?\" "
+		commaninput := exec.Command("powershell.exe", command)
+		output, _ := commaninput.CombinedOutput()
+		outstring := codeconversion.ConvertByte2String(output, "GB18030")
+		lastoutstring := strings.Split(outstring, ",\"")
+		lastoutstringdel := strings.Split(lastoutstring[1], "\"")
+		lastoupspeed, _ := strconv.ParseFloat(lastoutstringdel[0], 8)
+		s = fmt.Sprintf("%.0f", math.Floor(lastoupspeed))
+		return s, err
+	case p.Type == "uns":
+		//网络上传速率
+		command := "typeperf -si 1 -sc 1 \"\\Network Interface(*)\\Bytes Sent/sec\"  |findstr \",\" | findstr /V \"Interface\""
+		commaninput := exec.Command("powershell.exe", command)
+		output, _ := commaninput.CombinedOutput()
+		outstring := codeconversion.ConvertByte2String(output, "GB18030")
+		lastoutstring := strings.Split(outstring, "\",\"")
+		lastoupspeed, _ := strconv.ParseFloat(lastoutstring[1], 8)
+		lastoupspeedend := lastoupspeed / 1000
+		s = fmt.Sprintf("%.2f", lastoupspeedend)
+		return s, err
+	case p.Type == "dns":
+		//网络下载速率
+		command := "typeperf -si 1 -sc 1 \"\\Network Interface(*)\\Bytes Received/sec\"  |findstr \",\" | findstr /V \"Interface\""
+		commaninput := exec.Command("powershell.exe", command)
+		output, _ := commaninput.CombinedOutput()
+		outstring := codeconversion.ConvertByte2String(output, "GB18030")
+		lastoutstring := strings.Split(outstring, "\",\"")
+		lastoupspeed, _ := strconv.ParseFloat(lastoutstring[1], 8)
+		lastoupspeedend := lastoupspeed / 1000
+		s = fmt.Sprintf("%.2f", lastoupspeedend)
+		return s, err
+	case p.Type == "mp":
+		//内存使用率
+		command := "typeperf -si 1 -sc 1 \"\\Memory\\% Committed Bytes In Use\" |findstr /V \"Memory\" |findstr /V \"?\""
+		commaninput := exec.Command("powershell.exe", command)
+		output, _ := commaninput.CombinedOutput()
+		outstring := codeconversion.ConvertByte2String(output, "GB18030")
+		lastoutstring := strings.Split(outstring, ",\"")
+		lastoutstringdel := strings.Split(lastoutstring[1], "\"")
+		lastoupspeed, err := strconv.ParseFloat(lastoutstringdel[0], 8)
+		s = fmt.Sprintf("%.0f", math.Floor(lastoupspeed))
+		return s, err
+	case p.Type == "dt":
+		//系统磁盘容量
+		command := "wmic LogicalDisk where \"Caption='C:'\" get  Size /value | findstr \"Size\""
+		commaninput := exec.Command("powershell.exe", command)
+		output, _ := commaninput.CombinedOutput()
+		outstring := codeconversion.ConvertByte2String(output, "GB18030")
+		lastoutstring := strings.Split(outstring, "=")
+		b := strings.Replace(lastoutstring[1], "\r\n", "", -1)
+		c, err := strconv.ParseInt(b, 10, 64)
+		d := fmt.Sprintf("%.0f", math.Floor(float64(c/1073741824)))
+		return d, err
+	case p.Type == "fdp":
+		//系统磁盘剩余空间占总比的
+		command := "typeperf -si 1 -sc 1 \"\\LogicalDisk(C:)\\% Free Space\" |findstr /V \"Space\"| findstr /V \"?\""
+		commaninput := exec.Command("powershell.exe", command)
+		output, _ := commaninput.CombinedOutput()
+		outstring := codeconversion.ConvertByte2String(output, "GB18030")
+		lastoutstring := strings.Split(outstring, ",\"")
+		lastoutstringdel := strings.Split(lastoutstring[1], "\"")
+		lastoupspeed, _ := strconv.ParseFloat(lastoutstringdel[0], 8)
+		s = fmt.Sprintf("%.0f", math.Floor(lastoupspeed))
+		return s, err
+	case p.Type == "mt":
+		//系统总内存
+		command := " wmic ComputerSystem get TotalPhysicalMemory | findstr /V \"Total\""
+		commaninput := exec.Command("powershell.exe", command)
+		output, _ := commaninput.CombinedOutput()
+		outstring := codeconversion.ConvertByte2String(output, "GB18030")
+		a := strings.Replace(outstring, "\r\n", "", -1)
+		a = strings.Replace(a, " ", "", -1)
+		b, _ := strconv.ParseInt(a, 10, 64)
+		s = fmt.Sprintf("%.0f", (b/1073741824)+1)
+		return s, err
+	case p.Type == "sup":
+		//系统运行时间
+		Time := []string{"Days", "Hours", "Minutes", "Seconds"}
+		var TimeString []string
+		for _, v := range Time {
+			command := "(get-date) - (gcim Win32_OperatingSystem).LastBootUpTime | findstr /V  Total |findstr " + v
+			commaninput := exec.Command("powershell.exe", command)
+			output, _ := commaninput.CombinedOutput()
+			outstring := codeconversion.ConvertByte2String(output, "GB18030")
+			lastoutstring := strings.Split(outstring, ":")
+			a := strings.Replace(lastoutstring[1], "\r\n", "", -1)
+			TimeString = append(TimeString, a+v)
+		}
+		s := strings.Join(TimeString, "")
+		s = strings.Replace(s, " ", "", -1)
+		s = strings.Replace(s, "Days", "天", -1)
+		s = strings.Replace(s, "Hours", "小时", -1)
+		s = strings.Replace(s, "Minutes", "分钟", -1)
+		s = strings.Replace(s, "Seconds", "秒", -1)
+		return s, err
+	}
+	return s, err
 
 }

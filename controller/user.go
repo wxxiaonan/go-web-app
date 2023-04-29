@@ -70,3 +70,28 @@ func LoginHandler(c *gin.Context) {
 
 	ResopnseSuccess(c, token)
 }
+
+func Systemdata(c *gin.Context) {
+	p := new(models.ParamSystemGet)
+	if err := c.ShouldBindJSON(&p); err != nil {
+		//请求参数有误,直接返回响应
+
+		errs, ok := err.(validator.ValidationErrors)
+		if !ok {
+			ResopnseError(c, CodeInvalidParam)
+			return
+		}
+		ResponseErrorwithMsg(c, CodeInvalidParam, removeTopStruct(errs.Translate(trans)))
+		return
+	}
+	s, err := logic.NetworkSentSpeed(p)
+	if err != nil {
+		zap.L().Error("SingUp with invalid param", zap.String("username", p.Type), zap.Error(err))
+		ResopnseError(c, CodeServerApiType)
+
+		return
+	}
+	//3.返回响应
+
+	ResopnseSuccess(c, s)
+}

@@ -12,6 +12,7 @@ const (
 	CodeServerBusy
 	CodeNeedLogin
 	CodeInvalidAuth
+	CodeServerApiType
 )
 
 var codeMsgMap = map[ResCode]string{
@@ -23,6 +24,7 @@ var codeMsgMap = map[ResCode]string{
 	CodeServerBusy:      "服务器忙",
 	CodeNeedLogin:       "需要登陆",
 	CodeInvalidAuth:     "无效的token",
+	CodeServerApiType:   "接口参数错误",
 }
 
 func (c ResCode) Msg() string {
