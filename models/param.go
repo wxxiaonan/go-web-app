@@ -17,5 +17,5 @@ type ParamLogin struct {
 }
 
 type ParamSystemGet struct {
-	Type string `json:"type" binding:"required"`
+	ParameterType string `json:"parametertype" binding:"required"`
 }

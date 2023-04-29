@@ -56,7 +56,7 @@ func Login(p *models.ParamLogin) (token string, err error) {
 
 func NetworkSentSpeed(p *models.ParamSystemGet) (s string, err error) {
 	switch {
-	case p.Type == "cpu":
+	case p.ParameterType == "cpu":
 		//cpu使用率
 		command := " typeperf -si 1 -sc 1 \"\\Processor(_Total)\\% Processor Time\" |findstr /V \"Processor\" |findstr /V \"?\" "
 		commaninput := exec.Command("powershell.exe", command)
@@ -67,7 +67,7 @@ func NetworkSentSpeed(p *models.ParamSystemGet) (s string, err error) {
 		lastoupspeed, _ := strconv.ParseFloat(lastoutstringdel[0], 8)
 		s = fmt.Sprintf("%.0f", math.Floor(lastoupspeed))
 		return s, err
-	case p.Type == "uns":
+	case p.ParameterType == "uns":
 		//网络上传速率
 		command := "typeperf -si 1 -sc 1 \"\\Network Interface(*)\\Bytes Sent/sec\"  |findstr \",\" | findstr /V \"Interface\""
 		commaninput := exec.Command("powershell.exe", command)
@@ -78,7 +78,7 @@ func NetworkSentSpeed(p *models.ParamSystemGet) (s string, err error) {
 		lastoupspeedend := lastoupspeed / 1000
 		s = fmt.Sprintf("%.2f", lastoupspeedend)
 		return s, err
-	case p.Type == "dns":
+	case p.ParameterType == "dns":
 		//网络下载速率
 		command := "typeperf -si 1 -sc 1 \"\\Network Interface(*)\\Bytes Received/sec\"  |findstr \",\" | findstr /V \"Interface\""
 		commaninput := exec.Command("powershell.exe", command)
@@ -89,7 +89,7 @@ func NetworkSentSpeed(p *models.ParamSystemGet) (s string, err error) {
 		lastoupspeedend := lastoupspeed / 1000
 		s = fmt.Sprintf("%.2f", lastoupspeedend)
 		return s, err
-	case p.Type == "mp":
+	case p.ParameterType == "mp":
 		//内存使用率
 		command := "typeperf -si 1 -sc 1 \"\\Memory\\% Committed Bytes In Use\" |findstr /V \"Memory\" |findstr /V \"?\""
 		commaninput := exec.Command("powershell.exe", command)
@@ -100,7 +100,7 @@ func NetworkSentSpeed(p *models.ParamSystemGet) (s string, err error) {
 		lastoupspeed, err := strconv.ParseFloat(lastoutstringdel[0], 8)
 		s = fmt.Sprintf("%.0f", math.Floor(lastoupspeed))
 		return s, err
-	case p.Type == "dt":
+	case p.ParameterType == "dt":
 		//系统磁盘容量
 		command := "wmic LogicalDisk where \"Caption='C:'\" get  Size /value | findstr \"Size\""
 		commaninput := exec.Command("powershell.exe", command)
@@ -111,7 +111,7 @@ func NetworkSentSpeed(p *models.ParamSystemGet) (s string, err error) {
 		c, err := strconv.ParseInt(b, 10, 64)
 		d := fmt.Sprintf("%.0f", math.Floor(float64(c/1073741824)))
 		return d, err
-	case p.Type == "fdp":
+	case p.ParameterType == "fdp":
 		//系统磁盘剩余空间占总比的
 		command := "typeperf -si 1 -sc 1 \"\\LogicalDisk(C:)\\% Free Space\" |findstr /V \"Space\"| findstr /V \"?\""
 		commaninput := exec.Command("powershell.exe", command)
@@ -122,7 +122,7 @@ func NetworkSentSpeed(p *models.ParamSystemGet) (s string, err error) {
 		lastoupspeed, _ := strconv.ParseFloat(lastoutstringdel[0], 8)
 		s = fmt.Sprintf("%.0f", math.Floor(lastoupspeed))
 		return s, err
-	case p.Type == "mt":
+	case p.ParameterType == "mt":
 		//系统总内存
 		command := " wmic ComputerSystem get TotalPhysicalMemory | findstr /V \"Total\""
 		commaninput := exec.Command("powershell.exe", command)
@@ -134,7 +134,7 @@ func NetworkSentSpeed(p *models.ParamSystemGet) (s string, err error) {
 		s := ((b / 1073741824) + 1)
 		d := strconv.FormatInt(s, 10)
 		return d, err
-	case p.Type == "sup":
+	case p.ParameterType == "sup":
 		//系统运行时间
 		Time := []string{"Days", "Hours", "Minutes", "Seconds"}
 		var TimeString []string

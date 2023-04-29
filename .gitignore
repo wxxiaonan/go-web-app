@@ -1,8 +1,4 @@
 
-.idea/modules.xml
-.idea/shelf/_2023-4-23_23_45____.xml
-.idea/shelf/在进行更新之前于_2023-4-23_23_45_取消提交了变更_\[变更\]/shelved.patch
-.idea/workspace.xml
-go-web-app.exe
+.idea/*
 go-web-app.exe
 web_app.log

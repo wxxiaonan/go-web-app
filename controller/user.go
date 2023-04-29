@@ -86,7 +86,7 @@ func Systemdata(c *gin.Context) {
 	}
 	s, err := logic.NetworkSentSpeed(p)
 	if err != nil {
-		zap.L().Error("SingUp with invalid param", zap.String("username", p.Type), zap.Error(err))
+		zap.L().Error("SingUp with invalid param", zap.String("ParameterType", p.ParameterType), zap.Error(err))
 		ResopnseError(c, CodeServerApiType)
 
 		return
