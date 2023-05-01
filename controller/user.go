@@ -78,10 +78,10 @@ func Systemdata(c *gin.Context) {
 
 		errs, ok := err.(validator.ValidationErrors)
 		if !ok {
-			ResopnseError(c, CodeInvalidParam)
+			ResopnseError(c, CodeServerApiType)
 			return
 		}
-		ResponseErrorwithMsg(c, CodeInvalidParam, removeTopStruct(errs.Translate(trans)))
+		ResponseErrorwithMsg(c, CodeServerApiType, removeTopStruct(errs.Translate(trans)))
 		return
 	}
 	s, err := logic.NetworkSentSpeed(p)
@@ -93,5 +93,5 @@ func Systemdata(c *gin.Context) {
 	}
 	//3.返回响应
 
-	ResopnseSuccess(c, s)
+	ResopnseSystemDataSuccess(c, s)
 }

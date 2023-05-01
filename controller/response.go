@@ -40,6 +40,14 @@ func ResopnseSuccess(c *gin.Context, data interface{}) {
 	}
 	c.JSON(http.StatusOK, rd)
 }
+func ResopnseSystemDataSuccess(c *gin.Context, data interface{}) {
+	rd := &ResponseDate{
+		Code: CodeSuccess,
+		Msg:  CodeSuccess.Msg(),
+		Data: data,
+	}
+	c.JSON(http.StatusOK, rd)
+}
 
 // 自定义响应
 func ResponseErrorwithMsg(c *gin.Context, code ResCode, msg interface{}) {
