@@ -169,6 +169,7 @@ func Hostdataget(p *models.ParamHostDateGet) (s interface{}, err error) {
 		return s, err
 
 	case p.TypeOperation == "add":
+
 		err = mysql.Hostcheck(p)
 		if err != nil {
 			s = 0

@@ -111,8 +111,8 @@ func Hostlistata(c *gin.Context) {
 	}
 	s, err := logic.Hostdataget(p)
 	if err != nil {
-		zap.L().Error("SingUp with invalid param", zap.String("ParameterType", p.TypeOperation), zap.Error(err))
-		ResopnseError(c, CodeServerApiType)
+		zap.L().Error("hostlitdata with invalid param", zap.String("ParameterType", p.TypeOperation), zap.Error(err))
+		ResopnseError(c, CodeHostlist)
 
 		return
 	}

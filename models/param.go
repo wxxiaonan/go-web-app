@@ -21,10 +21,10 @@ type ParamSystemGet struct {
 }
 type ParamHostDateGet struct {
 	TypeOperation string `json:"typeoperation" binding:"required"`
-	Hostlist
+	Hostlist      `json:"hostlist"`
 }
 type Hostlist struct {
-	Hostid         int    `json:"hostid" bindding:"required"`
+	Hostid         int64  `json:"hostid"`
 	HostName       string `json:"hostname" bindding:"required"`
 	SystemType     string `json:"systemtype" bindding:"required"`
 	HostStatus     int    `json:"hoststatus" bindding:"required"`

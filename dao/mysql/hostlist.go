@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"go-web-app/models"
+	"math/rand"
+	"time"
 )
 
 var (
@@ -21,13 +23,12 @@ func Hostlistdataget(host *models.ParamHostDateGet) (hostgetdata []models.Hostli
 func Hostinfo(host *models.ParamHostDateGet) (hostgetdata interface{}, err error) {
 	hostlistid := host.Hostid
 	sqlStr := `select hostid,hostname,systemtype,hoststatus,hostip,hostlocation,hostowner,hostaddtime,hostnote,hostysteminfo from hostlist where hostip = ?`
-	if err := db.Get(hostgetdata, sqlStr, string(hostlistid)); err != nil {
+	if err := db.Get(hostgetdata, sqlStr, hostlistid); err != nil {
 		return hostgetdata, err
 	}
 	return
 }
 func Hostedit(host *models.ParamHostDateGet) (n int64, err error) {
-	fmt.Println(host)
 	sqlStr := "update hostlist set hostname=?,systemtype=?,hoststatus=?,hostip=?,hostlocation=?,hostowner=?,hostnote=? where hostid=?"
 	ret, err := db.Exec(sqlStr,
 		host.HostName,
@@ -39,10 +40,12 @@ func Hostedit(host *models.ParamHostDateGet) (n int64, err error) {
 		host.HostNote,
 		host.Hostid)
 	if err != nil {
+		fmt.Println(err)
 		return
 	}
 	n, err = ret.RowsAffected()
 	if err != nil {
+		fmt.Println(err)
 		return
 	} else {
 		fmt.Printf("更新数据为 %d 条\n", n)
@@ -50,18 +53,23 @@ func Hostedit(host *models.ParamHostDateGet) (n int64, err error) {
 	return
 
 }
-func Hostadd(host *models.ParamHostDateGet) (theId int64, err error) {
 
-	sqlStr := "insert into hostlist(hostname,systemtype,hoststatus,hostip,hostlocation,hostowner,hostnote,hostid) values (?,?,?,?,?,?,?,?)"
+func Hostidnum() (randnum int64) {
+	rand.Seed(time.Now().Unix())
+	randnum = int64(rand.Intn(9999999999999999))
+	return randnum
+}
+func Hostadd(host *models.ParamHostDateGet) (theId int64, err error) {
+	sqlStr := "insert into hostlist(hostid,hostname,systemtype,hoststatus,hostip,hostlocation,hostowner,hostnote) values (?,?,?,?,?,?,?,?)"
 	ret, err := db.Exec(sqlStr,
+		Hostidnum(),
 		host.HostName,
 		host.SystemType,
 		host.HostStatus,
 		host.HostIP,
 		host.HostLocation,
 		host.HostOwner,
-		host.HostNote,
-		host.Hostid)
+		host.HostNote)
 	if err != nil {
 		return
 	}
