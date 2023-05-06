@@ -95,3 +95,28 @@ func Systemdata(c *gin.Context) {
 
 	ResopnseSystemDataSuccess(c, s)
 }
+
+func Hostlistata(c *gin.Context) {
+	p := new(models.ParamHostDateGet)
+	if err := c.ShouldBindJSON(&p); err != nil {
+		//请求参数有误,直接返回响应
+
+		errs, ok := err.(validator.ValidationErrors)
+		if !ok {
+			ResopnseError(c, CodeServerApiType)
+			return
+		}
+		ResponseErrorwithMsg(c, CodeServerApiType, removeTopStruct(errs.Translate(trans)))
+		return
+	}
+	s, err := logic.Hostdataget(p)
+	if err != nil {
+		zap.L().Error("SingUp with invalid param", zap.String("ParameterType", p.TypeOperation), zap.Error(err))
+		ResopnseError(c, CodeServerApiType)
+
+		return
+	}
+	//3.返回响应
+
+	ResopnseSystemDataSuccess(c, s)
+}

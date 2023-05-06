@@ -158,3 +158,40 @@ func NetworkSentSpeed(p *models.ParamSystemGet) (s string, err error) {
 	return s, err
 
 }
+
+func Hostdataget(p *models.ParamHostDateGet) (s interface{}, err error) {
+	switch {
+	case p.TypeOperation == "init":
+		s, err := mysql.Hostlistdataget(p)
+		if err != nil {
+			return s, err
+		}
+		return s, err
+
+	case p.TypeOperation == "add":
+		err = mysql.Hostcheck(p)
+		if err != nil {
+			s = 0
+			return s, err
+		}
+		s, err := mysql.Hostadd(p)
+		if err != nil {
+			return s, err
+		}
+		return s, err
+	case p.TypeOperation == "del":
+
+		s, err := mysql.Hostdel(p)
+		if err != nil {
+			return s, err
+		}
+		return s, err
+	case p.TypeOperation == "edit":
+		s, err := mysql.Hostedit(p)
+		if err != nil {
+			return s, err
+		}
+		return s, err
+	}
+	return
+}
