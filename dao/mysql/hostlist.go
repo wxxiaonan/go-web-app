@@ -4,13 +4,25 @@ import (
 	"errors"
 	"fmt"
 	"go-web-app/models"
-	"math/rand"
+	"go-web-app/pkg/snowflake"
+	"go-web-app/pkg/todaytime"
+	"strconv"
 	"time"
 )
 
 var (
 	ErrorHostExist = errors.New("主机已存在")
+	timeLayoutday  = "2006-01-02"
 )
+
+func Hostlistalarm(host *models.ParamHostDateGet) (hostgetdata []models.Hostlist, err error) {
+	sqlStr := `select hostid,hostname,systemtype,hoststatus,hostip,hostlocation,hostowner,hostaddtime,hostnote,hostuptime,
+       (select count(hostid)  from alarmstatistics where alarmstatus=1 and hostid = host.hostid) as hostissues from hostlist host;`
+	if err := db.Select(&hostgetdata, sqlStr); err != nil {
+		return hostgetdata, err
+	}
+	return
+}
 
 func Hostlistdataget(host *models.ParamHostDateGet) (hostgetdata []models.Hostlist, err error) {
 
@@ -38,7 +50,8 @@ func Hostedit(host *models.ParamHostDateGet) (n int64, err error) {
 		host.HostLocation,
 		host.HostOwner,
 		host.HostNote,
-		host.Hostid)
+		host.Hostid,
+	)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -54,22 +67,20 @@ func Hostedit(host *models.ParamHostDateGet) (n int64, err error) {
 
 }
 
-func Hostidnum() (randnum int64) {
-	rand.Seed(time.Now().Unix())
-	randnum = int64(rand.Intn(9999999999999999))
-	return randnum
-}
 func Hostadd(host *models.ParamHostDateGet) (theId int64, err error) {
-	sqlStr := "insert into hostlist(hostid,hostname,systemtype,hoststatus,hostip,hostlocation,hostowner,hostnote) values (?,?,?,?,?,?,?,?)"
+	hosttime, _ := strconv.ParseInt(host.HostAddTime, 10, 64)
+	addtime := time.Unix(hosttime/1000, 0).Format(timeLayoutday) + todaytime.NowTime()
+	sqlStr := "insert into hostlist(hostid,hostname,systemtype,hoststatus,hostip,hostlocation,hostowner,hostnote,hostaddtime) values (?,?,?,?,?,?,?,?,?)"
 	ret, err := db.Exec(sqlStr,
-		Hostidnum(),
+		snowflake.IdNum(),
 		host.HostName,
 		host.SystemType,
 		host.HostStatus,
 		host.HostIP,
 		host.HostLocation,
 		host.HostOwner,
-		host.HostNote)
+		host.HostNote,
+		addtime)
 	if err != nil {
 		return
 	}

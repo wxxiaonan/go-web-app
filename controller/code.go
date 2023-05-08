@@ -14,6 +14,7 @@ const (
 	CodeInvalidAuth
 	CodeServerApiType
 	CodeHostlist
+	CodeAlarminfo
 )
 
 var codeMsgMap = map[ResCode]string{
@@ -27,6 +28,7 @@ var codeMsgMap = map[ResCode]string{
 	CodeInvalidAuth:     "无效的token",
 	CodeServerApiType:   "接口参数错误",
 	CodeHostlist:        "主机已存在",
+	CodeAlarminfo:       "报警接口参数错误",
 }
 
 func (c ResCode) Msg() string {

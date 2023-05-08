@@ -23,6 +23,22 @@ type ParamHostDateGet struct {
 	TypeOperation string `json:"typeoperation" binding:"required"`
 	Hostlist      `json:"hostlist"`
 }
+type ParamStatistics struct {
+	StatisticsType string `json:"statisticstype" binding:"required"`
+	Hostline       int    `json:"hostonline" `
+	Alarmline      int    `json:"alarmonline" `
+	Ararmlist      `json:"alarmlist"`
+}
+type Ararmlist struct {
+	Alarmid        int64  `json:"alarmid"`
+	Hostid         int64  `json:"hostid" `
+	AlarmStatus    int    `json:"alarmstatus"`
+	AlarmType      int    `json:"alarmtype"`
+	AlarmInfo      string `json:"alarminfo"`
+	AlarmNote      string `json:"alarmnote"`
+	AlarmStartTime string `json:"alarmstarttime"`
+	AlarmStopTime  string `json:"alarmstoptime"`
+}
 type Hostlist struct {
 	Hostid         int64  `json:"hostid"`
 	HostName       string `json:"hostname" bindding:"required"`
@@ -34,4 +50,6 @@ type Hostlist struct {
 	HostAddTime    string `json:"hostaddtime" bindding:"required"`
 	HostNote       string `json:"hostnote" bindding:"required"`
 	HostSystemInfo string `json:"hostsysteminfo"`
+	HostUptime     string `json:"hostuptime"`
+	HostIssues     int    `json:"hostissues"`
 }

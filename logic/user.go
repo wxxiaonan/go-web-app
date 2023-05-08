@@ -161,6 +161,12 @@ func NetworkSentSpeed(p *models.ParamSystemGet) (s string, err error) {
 
 func Hostdataget(p *models.ParamHostDateGet) (s interface{}, err error) {
 	switch {
+	case p.TypeOperation == "hostinit":
+		s, err := mysql.Hostlistalarm(p)
+		if err != nil {
+			return s, err
+		}
+		return s, err
 	case p.TypeOperation == "init":
 		s, err := mysql.Hostlistdataget(p)
 		if err != nil {
@@ -189,6 +195,61 @@ func Hostdataget(p *models.ParamHostDateGet) (s interface{}, err error) {
 		return s, err
 	case p.TypeOperation == "edit":
 		s, err := mysql.Hostedit(p)
+		if err != nil {
+			return s, err
+		}
+		return s, err
+	}
+	return
+}
+
+func Statistics(p *models.ParamStatistics) (s interface{}, err error) {
+	switch {
+	case p.StatisticsType == "alarmtotal":
+		s, err := mysql.AlarmTotal(p)
+		if err != nil {
+			return s, err
+		}
+		return s, err
+	case p.StatisticsType == "hosttotal":
+		s, err := mysql.HostTotal(p)
+		if err != nil {
+			return s, err
+		}
+		return s, err
+	case p.StatisticsType == "alarmonline":
+		s, err := mysql.AlarmOnline(p)
+		if err != nil {
+			return s, err
+		}
+		return s, err
+	case p.StatisticsType == "hostonline":
+		s, err := mysql.HostOnline(p)
+		if err != nil {
+			return s, err
+		}
+		return s, err
+	case p.StatisticsType == "hostaddtoday":
+		s, err := mysql.HostAddToday(p)
+		if err != nil {
+			return s, err
+		}
+		return s, err
+
+	case p.StatisticsType == "alarmdispose":
+		s, err := mysql.AlarmDisposeToday(p)
+		if err != nil {
+			return s, err
+		}
+		return s, err
+	case p.StatisticsType == "alarmaddtoday":
+		s, err := mysql.AlarmAddToday(p)
+		if err != nil {
+			return s, err
+		}
+		return s, err
+	case p.StatisticsType == "alarmadd":
+		s, err := mysql.AlarmAdd(p)
 		if err != nil {
 			return s, err
 		}

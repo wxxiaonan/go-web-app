@@ -120,3 +120,27 @@ func Hostlistata(c *gin.Context) {
 
 	ResopnseSystemDataSuccess(c, s)
 }
+func Statisticsdata(c *gin.Context) {
+	p := new(models.ParamStatistics)
+	if err := c.ShouldBindJSON(&p); err != nil {
+		//请求参数有误,直接返回响应
+
+		errs, ok := err.(validator.ValidationErrors)
+		if !ok {
+			ResopnseError(c, CodeServerApiType)
+			return
+		}
+		ResponseErrorwithMsg(c, CodeServerApiType, removeTopStruct(errs.Translate(trans)))
+		return
+	}
+	s, err := logic.Statistics(p)
+	if err != nil {
+		zap.L().Error("hostlitdata with invalid param", zap.String("ParameterType", p.StatisticsType), zap.Error(err))
+		ResopnseError(c, CodeAlarminfo)
+
+		return
+	}
+	//3.返回响应
+
+	ResopnseSystemDataSuccess(c, s)
+}

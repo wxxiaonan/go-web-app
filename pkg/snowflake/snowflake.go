@@ -2,6 +2,7 @@ package snowflake
 
 import (
 	sf "github.com/bwmarrin/snowflake"
+	"math/rand"
 	"time"
 )
 
@@ -20,4 +21,9 @@ func Init(startTime string, machineId int64) (err error) {
 
 func GenID() int64 {
 	return node.Generate().Int64()
+}
+func IdNum() (randnum int64) {
+	rand.Seed(time.Now().Unix())
+	randnum = int64(rand.Intn(9999999999999999))
+	return randnum
 }
