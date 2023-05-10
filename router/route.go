@@ -28,6 +28,7 @@ func Setup(mode, ClientUrl string) *gin.Engine {
 	r.POST("/systemview", controller.Systemdata)
 	r.POST("/hostlistdata", controller.Hostlistata)
 	r.POST("/statisticsdata", controller.Statisticsdata)
+	r.POST("/clientdata", controller.Clientdata)
 	r.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"msg": "404",

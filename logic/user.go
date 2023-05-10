@@ -257,3 +257,21 @@ func Statistics(p *models.ParamStatistics) (s interface{}, err error) {
 	}
 	return
 }
+
+func ClientData(p *models.ParamSystemGet) (Reply interface{}, err error) {
+	switch {
+	case p.ParameterType == "uptime":
+		Reply, err := mysql.ClientUptime(p)
+		if err != nil {
+			return Reply, err
+		}
+		return Reply, err
+	case p.ParameterType == "Confirm":
+		Reply, err := mysql.ClientConfirm(p)
+		if err != nil {
+			return Reply, err
+		}
+		return Reply, err
+	}
+	return
+}
