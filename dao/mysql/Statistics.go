@@ -8,6 +8,13 @@ import (
 	"time"
 )
 
+func AlarmInit(host *models.ParamStatistics) (hostgetdata []models.Ararmlist, err error) {
+	sqlStr := ` select a.hostid as alarmid,a.alarmtype,a.alarmstatus,a.alarmowner,hostlist.hostname as alarmhostname  from alarmsetting as a join hostlist on a.hostid=hostlist.hostid;`
+	if err := db.Select(&hostgetdata, sqlStr); err != nil {
+		return hostgetdata, err
+	}
+	return
+}
 func AlarmAdd(host *models.ParamStatistics) (theId int64, err error) {
 	sqlStr := "insert into alarmstatistics(alarmid,hostid,alarmstatus,alarmtype,alarminfo,alarmnote,alarmstarttime) values (?,?,?,?,?,?,?)"
 	ret, err := db.Exec(sqlStr,
@@ -30,6 +37,29 @@ func AlarmAdd(host *models.ParamStatistics) (theId int64, err error) {
 	return
 
 }
+
+func AlarmEdit(host *models.ParamStatistics) (n int64, err error) {
+	sqlStr := `update alarmsetting set alarmtype=?,alarmstatus=?,alarmowner=? where hostid=? `
+	ret, err := db.Exec(sqlStr,
+		host.AlarmType,
+		host.AlarmStatus,
+		host.AlarmOwner,
+		host.Alarmid,
+	)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	n, err = ret.RowsAffected()
+	if err != nil {
+		fmt.Println(err)
+		return
+	} else {
+		fmt.Printf("更新数据为 %d 条\n", n)
+	}
+	return
+}
+
 func AlarmTotal(host *models.ParamStatistics) (total int, err error) {
 	sqlStr := `select count(id)  from alarmstatistics`
 	if err := db.Get(&total, sqlStr); err != nil {

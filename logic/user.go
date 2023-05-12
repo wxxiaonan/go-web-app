@@ -154,6 +154,7 @@ func NetworkSentSpeed(p *models.ParamSystemGet) (s string, err error) {
 		s = strings.Replace(s, "Minutes", "分钟", -1)
 		s = strings.Replace(s, "Seconds", "秒", -1)
 		return s, err
+
 	}
 	return s, err
 
@@ -200,11 +201,18 @@ func Hostdataget(p *models.ParamHostDateGet) (s interface{}, err error) {
 		}
 		return s, err
 	}
+
 	return
 }
 
 func Statistics(p *models.ParamStatistics) (s interface{}, err error) {
 	switch {
+	case p.StatisticsType == "alarmedit":
+		s, err := mysql.AlarmEdit(p)
+		if err != nil {
+			return s, err
+		}
+		return s, err
 	case p.StatisticsType == "alarmtotal":
 		s, err := mysql.AlarmTotal(p)
 		if err != nil {
@@ -254,7 +262,15 @@ func Statistics(p *models.ParamStatistics) (s interface{}, err error) {
 			return s, err
 		}
 		return s, err
+	case p.StatisticsType == "alarminit":
+		s, err := mysql.AlarmInit(p)
+		if err != nil {
+			return s, err
+		}
+		return s, err
+
 	}
+
 	return
 }
 
@@ -268,6 +284,24 @@ func ClientData(p *models.ParamSystemGet) (Reply interface{}, err error) {
 		return Reply, err
 	case p.ParameterType == "Confirm":
 		Reply, err := mysql.ClientConfirm(p)
+		if err != nil {
+			return Reply, err
+		}
+		return Reply, err
+	case p.ParameterType == "basemonitoring":
+		Reply, err := mysql.BaseMonitoring(p)
+		if err != nil {
+			return Reply, err
+		}
+		return Reply, err
+	case p.ParameterType == "systeminfo":
+		Reply, err := mysql.ClientSystemInfo(p)
+		if err != nil {
+			return Reply, err
+		}
+		return Reply, err
+	case p.ParameterType == "systeminfoget":
+		Reply, err := mysql.ClientSystemInfoGet(p)
 		if err != nil {
 			return Reply, err
 		}
