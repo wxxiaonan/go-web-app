@@ -256,6 +256,12 @@ func Statistics(p *models.ParamStatistics) (s interface{}, err error) {
 			return s, err
 		}
 		return s, err
+	case p.StatisticsType == "alarmtodaytotal":
+		s, err := mysql.AlarmTodayTotal(p)
+		if err != nil {
+			return s, err
+		}
+		return s, err
 	case p.StatisticsType == "alarmadd":
 		s, err := mysql.AlarmAdd(p)
 		if err != nil {
@@ -264,6 +270,12 @@ func Statistics(p *models.ParamStatistics) (s interface{}, err error) {
 		return s, err
 	case p.StatisticsType == "alarminit":
 		s, err := mysql.AlarmInit(p)
+		if err != nil {
+			return s, err
+		}
+		return s, err
+	case p.StatisticsType == "alarmonlineinit":
+		s, err := mysql.AlarmOnlineInit(p)
 		if err != nil {
 			return s, err
 		}

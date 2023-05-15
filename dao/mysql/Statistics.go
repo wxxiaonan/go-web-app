@@ -8,6 +8,22 @@ import (
 	"time"
 )
 
+func AlarmOnlineInit(host *models.ParamStatistics) (hostgetdata []models.Ararmlist, err error) {
+	sqlStr := ` select a.hostid as alarmid,
+        a.alarmtype,
+        hostlist.hostowner as alarmhostonwer,
+        hostlist.hostname as alarmhostname,
+        hostlist.hostip as alarmhostip,
+        a.alarminfo,
+        a.alarmstarttime  
+ from alarmstatistics as a join 
+     hostlist on a.hostid=hostlist.hostid
+ where a.alarmstatus=1;`
+	if err := db.Select(&hostgetdata, sqlStr); err != nil {
+		return hostgetdata, err
+	}
+	return
+}
 func AlarmInit(host *models.ParamStatistics) (hostgetdata []models.Ararmlist, err error) {
 	sqlStr := ` select a.hostid as alarmid,a.alarmtype,a.alarmstatus,a.alarmowner,hostlist.hostname as alarmhostname  from alarmsetting as a join hostlist on a.hostid=hostlist.hostid;`
 	if err := db.Select(&hostgetdata, sqlStr); err != nil {
@@ -43,7 +59,7 @@ func AlarmEdit(host *models.ParamStatistics) (n int64, err error) {
 	ret, err := db.Exec(sqlStr,
 		host.AlarmType,
 		host.AlarmStatus,
-		host.AlarmOwner,
+		host.AlarmHostOnwer,
 		host.Alarmid,
 	)
 	if err != nil {
@@ -102,8 +118,18 @@ func AlarmDisposeToday(host *models.ParamStatistics) (total int, err error) {
 	}
 	return
 }
+func AlarmTodayTotal(host *models.ParamStatistics) (total int, err error) {
+	now := time.Now()
+
+	sqlStr := `select count(id)  from alarmstatistics where alarmstarttime > ? `
+	if err := db.Get(&total, sqlStr, now.Format("2006-01-02")+" 00:00:00"); err != nil {
+		return total, err
+	}
+	return
+}
 func AlarmAddToday(host *models.ParamStatistics) (total int, err error) {
 	now := time.Now()
+	host.Hostline = 1
 	sqlStr := `select count(id)  from alarmstatistics where alarmstatus= ? and alarmstarttime > ? `
 	if err := db.Get(&total, sqlStr, host.Hostline, now.Format("2006-01-02")+" 00:00:00"); err != nil {
 		return total, err

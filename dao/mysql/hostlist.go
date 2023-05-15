@@ -69,10 +69,11 @@ func Hostedit(host *models.ParamHostDateGet) (n int64, err error) {
 
 func Hostadd(host *models.ParamHostDateGet) (theId int64, err error) {
 	hosttime, _ := strconv.ParseInt(host.HostAddTime, 10, 64)
+	hostidadd := snowflake.IdNum()
 	addtime := time.Unix(hosttime/1000, 0).Format(timeLayoutday) + todaytime.NowTime()
 	sqlStr := "insert into hostlist(hostid,hostname,systemtype,hoststatus,hostip,hostlocation,hostowner,hostnote,hostaddtime) values (?,?,?,?,?,?,?,?,?)"
 	ret, err := db.Exec(sqlStr,
-		snowflake.IdNum(),
+		hostidadd,
 		host.HostName,
 		host.SystemType,
 		host.HostStatus,
@@ -88,7 +89,19 @@ func Hostadd(host *models.ParamHostDateGet) (theId int64, err error) {
 	if err != nil {
 		return theId, err
 	} else {
-		fmt.Printf("插入数据的id 为 %d. \n", theId)
+		fmt.Printf("主机表插入数据的id 为 %d. \n", theId)
+	}
+	var alarmtype = 4011
+	sqlStrAlarm := "insert into alarmsetting(hostid,alarmtype,alarmstatus,alarmowner) values (?,?,?,?)"
+	ret, err = db.Exec(sqlStrAlarm, hostidadd, alarmtype, 1, host.HostOwner)
+	if err != nil {
+		return
+	}
+	theId, err = ret.LastInsertId()
+	if err != nil {
+		return theId, err
+	} else {
+		fmt.Printf("主机设置表插入数据的id 为 %d. \n", theId)
 	}
 	return
 
@@ -104,7 +117,7 @@ func Hostdel(host *models.ParamHostDateGet) (n int64, err error) {
 	if err != nil {
 		return
 	} else {
-		fmt.Printf("删除数据为 %d 条\n", n)
+		fmt.Printf("主机表删除数据为 %d 条\n", n)
 	}
 	return
 

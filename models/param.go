@@ -53,8 +53,9 @@ type Ararmlist struct {
 	AlarmNote      string `json:"alarmnote"`
 	AlarmStartTime string `json:"alarmstarttime"`
 	AlarmStopTime  string `json:"alarmstoptime"`
-	AlarmOwner     string `json:"alarmowner"`
-	Alarmhostname  string `json:"alarmhostname"`
+	AlarmHostOnwer string `json:"alarmhostonwer"`
+	AlarmHostName  string `json:"alarmhostname"`
+	AlarmHostIp    string `json:"alarmhostip"`
 }
 type Hostlist struct {
 	Hostid         int64  `json:"hostid"`
