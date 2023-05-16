@@ -44,6 +44,18 @@ type ParamStatistics struct {
 	Alarmline      int    `json:"alarmonline" `
 	Ararmlist      `json:"alarmlist"`
 }
+
+type ParamAlarmSetting struct {
+	AlarmSettingOption string `json:"alarmsettingoption" binding:"required"`
+
+	//若数据为空值使用指针
+	CpuOption        *int `json:"cpuoption"`
+	MemoryOption     *int `json:"memoryoption"`
+	SystemDiskOption *int `json:"systemdiskoption"`
+	ThresholdStatus  *int `json:"thresholadstatus"`
+	Ararmlist        `json:"ararmlist"`
+	NotiAPI          `json:"notiapi"`
+}
 type Ararmlist struct {
 	Alarmid        int64  `json:"alarmid"`
 	Hostid         int64  `json:"hostid" `
@@ -70,4 +82,12 @@ type Hostlist struct {
 	HostSystemInfo string `json:"hostsysteminfo"`
 	HostUptime     string `json:"hostuptime"`
 	HostIssues     int    `json:"hostissues"`
+}
+
+type NotiAPI struct {
+	WorkApiUrl *string `json:"workapiurl"`
+	DingApiUrl *string `json:"dingapiurl"`
+	DingAtuser *string `json:"dingatuser"`
+	WorkAtuser *string `json:"workatuser"`
+	Text       string  `json:"content"`
 }

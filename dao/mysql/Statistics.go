@@ -3,8 +3,6 @@ package mysql
 import (
 	"fmt"
 	"go-web-app/models"
-	"go-web-app/pkg/snowflake"
-	"go-web-app/pkg/todaytime"
 	"time"
 )
 
@@ -25,53 +23,9 @@ func AlarmOnlineInit(host *models.ParamStatistics) (hostgetdata []models.Ararmli
 	return
 }
 func AlarmInit(host *models.ParamStatistics) (hostgetdata []models.Ararmlist, err error) {
-	sqlStr := ` select a.hostid as alarmid,a.alarmtype,a.alarmstatus,a.alarmowner,hostlist.hostname as alarmhostname  from alarmsetting as a join hostlist on a.hostid=hostlist.hostid;`
+	sqlStr := ` select a.hostid as alarmid,a.alarmtype,a.alarmstatus,a.alarmhostonwer,hostlist.hostname as alarmhostname  from alarmsetting as a join hostlist on a.hostid=hostlist.hostid;`
 	if err := db.Select(&hostgetdata, sqlStr); err != nil {
 		return hostgetdata, err
-	}
-	return
-}
-func AlarmAdd(host *models.ParamStatistics) (theId int64, err error) {
-	sqlStr := "insert into alarmstatistics(alarmid,hostid,alarmstatus,alarmtype,alarminfo,alarmnote,alarmstarttime) values (?,?,?,?,?,?,?)"
-	ret, err := db.Exec(sqlStr,
-		snowflake.IdNum(),
-		host.Hostid,
-		1,
-		host.AlarmType,
-		host.AlarmInfo,
-		host.AlarmNote,
-		todaytime.NowTimeFull())
-	if err != nil {
-		return
-	}
-	theId, err = ret.LastInsertId()
-	if err != nil {
-		return theId, err
-	} else {
-		fmt.Printf("插入数据的id 为 %d. \n", theId)
-	}
-	return
-
-}
-
-func AlarmEdit(host *models.ParamStatistics) (n int64, err error) {
-	sqlStr := `update alarmsetting set alarmtype=?,alarmstatus=?,alarmowner=? where hostid=? `
-	ret, err := db.Exec(sqlStr,
-		host.AlarmType,
-		host.AlarmStatus,
-		host.AlarmHostOnwer,
-		host.Alarmid,
-	)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	n, err = ret.RowsAffected()
-	if err != nil {
-		fmt.Println(err)
-		return
-	} else {
-		fmt.Printf("更新数据为 %d 条\n", n)
 	}
 	return
 }

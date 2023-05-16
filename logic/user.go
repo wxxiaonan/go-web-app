@@ -205,14 +205,45 @@ func Hostdataget(p *models.ParamHostDateGet) (s interface{}, err error) {
 	return
 }
 
-func Statistics(p *models.ParamStatistics) (s interface{}, err error) {
+func AlarmOption(p *models.ParamAlarmSetting) (s interface{}, err error) {
 	switch {
-	case p.StatisticsType == "alarmedit":
+	case p.AlarmSettingOption == "add":
+		s, err := mysql.AlarmAdd(p)
+		if err != nil {
+			return s, err
+		}
+		return s, err
+	case p.AlarmSettingOption == "update":
 		s, err := mysql.AlarmEdit(p)
 		if err != nil {
 			return s, err
 		}
 		return s, err
+	case p.AlarmSettingOption == "optioninit":
+		s, err := mysql.AlarmSettingInit(p)
+		if err != nil {
+			return s, err
+		}
+		fmt.Println(s)
+		return s, err
+	case p.AlarmSettingOption == "updatenoti":
+		s, err := mysql.AlarmUpdateNoti(p)
+		if err != nil {
+			return s, err
+		}
+		return s, err
+	case p.AlarmSettingOption == "updatethreshold":
+		s, err := mysql.AlarmUpdateThreshold(p)
+		if err != nil {
+			return s, err
+		}
+		return s, err
+	}
+	return
+}
+
+func Statistics(p *models.ParamStatistics) (s interface{}, err error) {
+	switch {
 	case p.StatisticsType == "alarmtotal":
 		s, err := mysql.AlarmTotal(p)
 		if err != nil {
@@ -243,13 +274,6 @@ func Statistics(p *models.ParamStatistics) (s interface{}, err error) {
 			return s, err
 		}
 		return s, err
-
-	case p.StatisticsType == "alarmdispose":
-		s, err := mysql.AlarmDisposeToday(p)
-		if err != nil {
-			return s, err
-		}
-		return s, err
 	case p.StatisticsType == "alarmaddtoday":
 		s, err := mysql.AlarmAddToday(p)
 		if err != nil {
@@ -258,12 +282,6 @@ func Statistics(p *models.ParamStatistics) (s interface{}, err error) {
 		return s, err
 	case p.StatisticsType == "alarmtodaytotal":
 		s, err := mysql.AlarmTodayTotal(p)
-		if err != nil {
-			return s, err
-		}
-		return s, err
-	case p.StatisticsType == "alarmadd":
-		s, err := mysql.AlarmAdd(p)
 		if err != nil {
 			return s, err
 		}
