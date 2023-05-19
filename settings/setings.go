@@ -19,6 +19,7 @@ type AppConfig struct {
 	*LogConfig   `mapstructure:"log"`
 	*MySQLConfig `mapstructure:"mysql"`
 	*RedisConfig `mapstructure:"redis"`
+	*EtcdConfig  `mapstructure:"etcd"`
 }
 
 type LogConfig struct {
@@ -44,6 +45,13 @@ type RedisConfig struct {
 	Password string `mapstructure:"password"`
 	DbName   int    `mapstructure:"dbname"`
 	PoolSize int    `mapstructure:"pool_size"`
+}
+
+type EtcdConfig struct {
+	Endpoints   []string `mapstructure:"host"`
+	DialTimeout int64    `mapstructure:"dialtiemeout"`
+	Username    string   `mapstructure:"username"`
+	Password    string   `mapstructure:"password"`
 }
 
 func Init(configfile string) (err error) {

@@ -27,5 +27,10 @@ redis:
     password: "sinfotek"
     dbname: 6
     pool_size: 100
+etcd:
+  host: ["127.0.0.1:8084"]
+  username: "root"
+  password: "sinfotek"
+  dialtiemeout: 3000
 
 

@@ -11,7 +11,7 @@ import (
 func WXWork(key *models.NotiAPI) (err error) {
 	dataJsonStr := fmt.Sprintf(`{"msgtype": "text", "text": {"content": "%s", "mentioned_list": [%s]}}`, key.Text, key.WorkAtuser)
 	resp, err := http.Post(
-		key.WorkApiUrl,
+		*key.WorkApiUrl,
 		"application/json",
 		bytes.NewBuffer([]byte(dataJsonStr)))
 	if err != nil {
@@ -32,7 +32,7 @@ func DingDing(key *models.NotiAPI) (err error) {
 		`{"at": {"atMobiles":["%s"],"atUserIds":["user123"],"isAtAll": false},"text": {"content":"%s"},"msgtype":"text"}`,
 		key.DingAtuser, key.Text)
 	resp, err := http.Post(
-		key.DingApiUrl,
+		*key.DingApiUrl,
 		"application/json",
 		bytes.NewBuffer([]byte(dataJsonStr)))
 	if err != nil {

@@ -1,5 +1,7 @@
 package models
 
+import clientv3 "go.etcd.io/etcd/client/v3"
+
 //定义请求的参数结构体
 
 // 用户注册参数
@@ -46,8 +48,7 @@ type ParamStatistics struct {
 }
 
 type ParamAlarmSetting struct {
-	AlarmSettingOption string `json:"alarmsettingoption" binding:"required"`
-
+	AlarmSettingOption string `json:"alarmoption" binding:"required"`
 	//若数据为空值使用指针
 	CpuOption        *int `json:"cpuoption"`
 	MemoryOption     *int `json:"memoryoption"`
@@ -90,4 +91,36 @@ type NotiAPI struct {
 	DingAtuser *string `json:"dingatuser"`
 	WorkAtuser *string `json:"workatuser"`
 	Text       string  `json:"content"`
+}
+
+type ParameCrontab struct {
+	ParameOption string `json:"parameoption" bindding:"required"`
+	CrontabJob   `json:"crontabmaster"`
+	Job          `json:"job"`
+	JobMgr       `json:"jobmgr"`
+}
+
+type Job struct {
+	Name     string `json:"name"`
+	Command  string `json:"command"`
+	CronExpr string `json:"cronexpr"`
+}
+type JobMgr struct {
+	Kv     clientv3.KV
+	Lease  clientv3.Lease
+	Clinet *clientv3.Client
+}
+
+type CrontabJob struct {
+	JobId        int    `json:"jobid"`
+	JobCronExpr  string `json:"jobcronexpr"`
+	JobName      string `json:"jobname"`
+	JobShell     string `json:"jobshell"`
+	JobStatus    int    `json:"jobstatus"`
+	JobStartTime string `json:"jobstarttime"`
+	JobStopTime  string `json:"jobstoptime"`
+	JobInfo      string `json:"jobinfo"`
+	JobRunning   int    `json:"jobrunning"`
+}
+type CrontabWorker struct {
 }

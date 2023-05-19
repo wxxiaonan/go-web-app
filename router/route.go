@@ -30,6 +30,7 @@ func Setup(mode, ClientUrl string) *gin.Engine {
 	r.POST("/statisticsdata", controller.Statisticsdata)
 	r.POST("/alarmsetting", controller.Alarmsetting)
 	r.POST("/clientdata", controller.Clientdata)
+	r.POST("/crontab", controller.CrontabSystem)
 	r.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"msg": "404",
