@@ -95,7 +95,7 @@ type NotiAPI struct {
 
 type ParameCrontab struct {
 	ParameOption string `json:"parameoption" bindding:"required"`
-	CrontabJob   `json:"crontabmaster"`
+	CrontabJob   `json:"crontabjob"`
 	Job          `json:"job"`
 	JobMgr       `json:"jobmgr"`
 }

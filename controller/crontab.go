@@ -23,7 +23,7 @@ func CrontabSystem(c *gin.Context) {
 	}
 	s, err := logic.Crond(p)
 	if err != nil {
-		zap.L().Error("hostlitdata with invalid param", zap.String("ParameterType", p.ParameOption), zap.Error(err))
+		zap.L().Error("ceontab with invalid param", zap.String("ParameOption", p.ParameOption), zap.Error(err))
 		ResopnseError(c, CodeInvalidParam)
 
 		return
