@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func AlarmOnlineInit(host *models.ParamStatistics) (hostgetdata []models.Ararmlist, err error) {
+func AlarmOnlineInit(host *models.ParamStatistics) (hostgetdata []models.Alarmlist, err error) {
 	sqlStr := ` select a.hostid as alarmid,
         a.alarmtype,
         hostlist.hostowner as alarmhostonwer,
@@ -22,7 +22,7 @@ func AlarmOnlineInit(host *models.ParamStatistics) (hostgetdata []models.Ararmli
 	}
 	return
 }
-func AlarmInit(host *models.ParamStatistics) (hostgetdata []models.Ararmlist, err error) {
+func AlarmInit(host *models.ParamStatistics) (hostgetdata []models.Alarmlist, err error) {
 	sqlStr := ` select a.hostid as alarmid,a.alarmtype,a.alarmstatus,a.alarmhostonwer,hostlist.hostname as alarmhostname  from alarmsetting as a join hostlist on a.hostid=hostlist.hostid;`
 	if err := db.Select(&hostgetdata, sqlStr); err != nil {
 		return hostgetdata, err

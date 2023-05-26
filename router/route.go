@@ -16,7 +16,6 @@ func Setup(mode, ClientUrl string) *gin.Engine {
 	r := gin.New()
 	r.Use(middlewares.Cors(ClientUrl))
 	r.Use(logger.GinLogger(), logger.GinRecovery(true))
-
 	//注册业务路由
 	r.POST("/signup", controller.SignUpHandler)
 	r.POST("/login", controller.LoginHandler)

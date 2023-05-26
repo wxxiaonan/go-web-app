@@ -11,8 +11,9 @@ import (
 )
 
 var (
-	ErrorHostExist = errors.New("主机已存在")
-	timeLayoutday  = "2006-01-02"
+	ErrorHostExist    = errors.New("主机已存在")
+	timeLayoutday     = "2006-01-02"
+	timeLayoutdayfull = "2006-01-02 00:00:00"
 )
 
 func Hostlistalarm(host *models.ParamHostDateGet) (hostgetdata []models.Hostlist, err error) {

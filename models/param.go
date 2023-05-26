@@ -44,7 +44,7 @@ type ParamStatistics struct {
 	StatisticsType string `json:"statisticstype" binding:"required"`
 	Hostline       int    `json:"hostonline" `
 	Alarmline      int    `json:"alarmonline" `
-	Ararmlist      `json:"alarmlist"`
+	Alarmlist      `json:"alarmlist"`
 }
 
 type ParamAlarmSetting struct {
@@ -54,10 +54,10 @@ type ParamAlarmSetting struct {
 	MemoryOption     *int `json:"memoryoption"`
 	SystemDiskOption *int `json:"systemdiskoption"`
 	ThresholdStatus  *int `json:"thresholadstatus"`
-	Ararmlist        `json:"ararmlist"`
+	Alarmlist        `json:"alarmlist"`
 	NotiAPI          `json:"notiapi"`
 }
-type Ararmlist struct {
+type Alarmlist struct {
 	Alarmid        int64  `json:"alarmid"`
 	Hostid         int64  `json:"hostid" `
 	AlarmStatus    int    `json:"alarmstatus"`
@@ -120,7 +120,6 @@ type CrontabJob struct {
 	JobStartTime string `json:"jobstarttime"`
 	JobStopTime  string `json:"jobstoptime"`
 	JobInfo      string `json:"jobinfo"`
-	JobRunning   int    `json:"jobrunning"`
-}
-type CrontabWorker struct {
+	JobRunning   string `json:"jobrunning"`
+	JobErr       string `json:"joberr"`
 }

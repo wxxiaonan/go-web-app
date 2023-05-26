@@ -213,7 +213,7 @@ func AlarmOption(p *models.ParamAlarmSetting) (s interface{}, err error) {
 			return s, err
 		}
 		return s, err
-	case p.AlarmSettingOption == "update":
+	case p.AlarmSettingOption == "alarmedit":
 		s, err := mysql.AlarmEdit(p)
 		if err != nil {
 			return s, err

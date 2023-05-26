@@ -81,7 +81,7 @@ func AlarmUpdateThreshold(host *models.ParamAlarmSetting) (n int64, err error) {
 }
 
 func AlarmEdit(host *models.ParamAlarmSetting) (n int64, err error) {
-	sqlStr := `update alarmsetting set alarmtype=?,alarmstatus=?,alarmowner=? where hostid=? `
+	sqlStr := `update alarmsetting set alarmtype=?,alarmstatus=?,alarmhostonwer=? where hostid=? `
 	ret, err := db.Exec(sqlStr,
 		host.AlarmType,
 		host.AlarmStatus,

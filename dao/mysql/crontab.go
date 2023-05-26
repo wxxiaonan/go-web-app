@@ -9,6 +9,7 @@ import (
 	"go-web-app/pkg/todaytime"
 	"go-web-app/settings"
 	clientv3 "go.etcd.io/etcd/client/v3"
+	"strconv"
 	"time"
 )
 
@@ -166,8 +167,8 @@ func CrontabDel(client *models.ParameCrontab) (Reply int64, err error) {
 	if oldjob, err = DeleteJob(GJobmgr, client.Job); err != nil {
 		fmt.Println(err)
 	}
-	sqlStr := "delete  from joblist where jobname=?"
-	ret, err := db.Exec(sqlStr, client.JobName)
+	sqlStr := "delete  from joblist where jobid=?"
+	ret, err := db.Exec(sqlStr, client.JobId)
 	if err != nil {
 		return
 	}
@@ -175,7 +176,7 @@ func CrontabDel(client *models.ParameCrontab) (Reply int64, err error) {
 	if err != nil {
 		return
 	} else {
-		fmt.Printf("主机表删除数据为 %d 条\n", Reply)
+		fmt.Printf("删除数据 %d 条\n", Reply)
 	}
 	return
 
@@ -244,6 +245,42 @@ func CrontabAddToday(client *models.ParameCrontab) (total int, err error) {
 	sqlStr := `select count(jobid)  from joblist where jobstatus= ? and jobstarttime > ? `
 	if err := db.Get(&total, sqlStr, client.JobStatus, now.Format("2006-01-02")+" 00:00:00"); err != nil {
 		return total, err
+	}
+	return
+}
+
+func TaskJobLog(client *models.ParameCrontab) (Reply int64, err error) {
+	starttime1, _ := strconv.ParseInt(client.JobStartTime, 10, 64)
+	starttime2 := time.Unix((starttime1+28800000)/1000, 0)
+	stoptime1, _ := strconv.ParseInt(client.JobStopTime, 10, 64)
+	stoptime2 := time.Unix((stoptime1+28800000)/1000, 0)
+	jobrunning := stoptime1 - starttime1
+	jobrunning1 := jobrunning / 1000
+	sqlStr := "insert into jobdata(jobname,jobstarttime,jobstoptime,jobinfo,jobrunning,joberr) values (?,?,?,?,?,?)"
+	ret, err := db.Exec(sqlStr,
+		client.JobName,
+		starttime2,
+		stoptime2,
+		client.JobInfo,
+		jobrunning1,
+		client.JobErr,
+	)
+	Reply, err = ret.RowsAffected()
+	if err != nil {
+		fmt.Println(err)
+		return
+	} else {
+		fmt.Printf("更新数据为 %d 条\n", Reply)
+	}
+	return
+
+}
+
+func TaskJobLogSelect(client *models.ParameCrontab) (Reply []models.CrontabJob, err error) {
+
+	sqlStr := "select jobinfo,jobstarttime,jobstoptime,jobrunning from jobdata where jobname=? ORDER BY `jobstoptime` DESC LIMIT 0,10 "
+	if err := db.Select(&Reply, sqlStr, client.JobName); err != nil {
+		return Reply, err
 	}
 	return
 }
