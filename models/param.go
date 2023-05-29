@@ -98,6 +98,7 @@ type ParameCrontab struct {
 	CrontabJob   `json:"crontabjob"`
 	Job          `json:"job"`
 	JobMgr       `json:"jobmgr"`
+	SystemLog    `json:"systemlog"`
 }
 
 type Job struct {
@@ -122,4 +123,14 @@ type CrontabJob struct {
 	JobInfo      string `json:"jobinfo"`
 	JobRunning   string `json:"jobrunning"`
 	JobErr       string `json:"joberr"`
+}
+
+type SystemLog struct {
+	SystemlogId        int64  `json:"systemlogid"`
+	SystemlogHostName  string `json:"systemloghostname" `
+	SystemlogType      string `json:"systemlogtype"`
+	SystemlogInfo      string `json:"systemloginfo"`
+	SystemlogNote      string `json:"systemlognote"`
+	SystemlogStartTime string `json:"systemlogstarttime"`
+	SystemlogHostOnwer string `json:"systemloghostonwer"`
 }

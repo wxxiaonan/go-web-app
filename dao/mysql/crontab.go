@@ -153,6 +153,19 @@ func CrontabAdd(client *models.ParameCrontab) (Reply int64, err error) {
 		}
 		return
 	}
+	clinet := models.SystemLog{
+		SystemlogHostName:  "所有主机",
+		SystemlogType:      "新增定时任务",
+		SystemlogInfo:      sqlStr,
+		SystemlogStartTime: todaytime.NowTimeFull(),
+		SystemlogHostOnwer: "管理员",
+	}
+	if err == nil {
+		clinet.SystemlogNote = "成功"
+	} else {
+		clinet.SystemlogNote = err.Error()
+	}
+	_, err = SystemLogInsert(clinet)
 	Reply, err = ret.RowsAffected()
 	if err != nil {
 		fmt.Println(err)
@@ -178,6 +191,19 @@ func CrontabDel(client *models.ParameCrontab) (Reply int64, err error) {
 	} else {
 		fmt.Printf("删除数据 %d 条\n", Reply)
 	}
+	clinet := models.SystemLog{
+		SystemlogHostName:  "所有主机",
+		SystemlogType:      "删除定时任务",
+		SystemlogInfo:      sqlStr,
+		SystemlogStartTime: todaytime.NowTimeFull(),
+		SystemlogHostOnwer: "管理员",
+	}
+	if err == nil {
+		clinet.SystemlogNote = "成功"
+	} else {
+		clinet.SystemlogNote = err.Error()
+	}
+	_, err = SystemLogInsert(clinet)
 	return
 
 }
@@ -204,6 +230,19 @@ func CrontabEdit(client *models.ParameCrontab) (Reply int64, err error) {
 	} else {
 		fmt.Printf("更新数据为 %d 条\n", Reply)
 	}
+	clinet := models.SystemLog{
+		SystemlogHostName:  "所有主机",
+		SystemlogType:      "修改定时任务",
+		SystemlogInfo:      sqlStr,
+		SystemlogStartTime: todaytime.NowTimeFull(),
+		SystemlogHostOnwer: "管理员",
+	}
+	if err == nil {
+		clinet.SystemlogNote = "成功"
+	} else {
+		clinet.SystemlogNote = err.Error()
+	}
+	_, err = SystemLogInsert(clinet)
 	return
 
 }
@@ -281,6 +320,50 @@ func TaskJobLogSelect(client *models.ParameCrontab) (Reply []models.CrontabJob, 
 	sqlStr := "select jobinfo,jobstarttime,jobstoptime,jobrunning from jobdata where jobname=? ORDER BY `jobstoptime` DESC LIMIT 0,10 "
 	if err := db.Select(&Reply, sqlStr, client.JobName); err != nil {
 		return Reply, err
+	}
+	return
+}
+
+func LogmsgGet(client *models.ParameCrontab) (hostgetdata []models.Alarmlist, err error) {
+	sqlStr := ` select a.hostid as alarmid,
+        a.alarmtype,
+        hostlist.hostowner as alarmhostonwer,
+        hostlist.hostname as alarmhostname,
+        hostlist.hostip as alarmhostip,
+        a.alarminfo,
+        a.alarmstarttime  
+ from alarmstatistics as a join 
+     hostlist on a.hostid=hostlist.hostid;`
+	if err := db.Select(&hostgetdata, sqlStr); err != nil {
+		return hostgetdata, err
+	}
+	return
+}
+func SystemLogInsert(client models.SystemLog) (Reply int64, err error) {
+	sqlStr := "insert into systemlog(systemlogid,systemloghostname,systemlogtype,systemloginfo,systemlognote,systemlogstarttime) values (?,?,?,?,?,?)"
+	ret, err := db.Exec(sqlStr,
+		snowflake.IdNum(),
+		client.SystemlogHostName,
+		client.SystemlogType,
+		client.SystemlogInfo,
+		client.SystemlogNote,
+		todaytime.NowTimeFull(),
+	)
+	Reply, err = ret.RowsAffected()
+	if err != nil {
+		fmt.Println(err)
+		return
+	} else {
+		fmt.Printf("更新数据为 %d 条\n", Reply)
+	}
+
+	return
+}
+
+func SystemLogGet(client *models.ParameCrontab) (hostgetdata []models.SystemLog, err error) {
+	sqlStr := " select systemlogid,systemlogtype,systemloginfo,systemloghostname,systemlognote,systemlogstarttime  from systemlog ORDER BY `systemlogstarttime` DESC LIMIT 0,100 "
+	if err := db.Select(&hostgetdata, sqlStr); err != nil {
+		return hostgetdata, err
 	}
 	return
 }

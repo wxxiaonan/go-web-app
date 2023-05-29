@@ -41,6 +41,22 @@ func Hostinfo(host *models.ParamHostDateGet) (hostgetdata interface{}, err error
 	}
 	return
 }
+func HostName(hostid string) (hostname string) {
+	sqlStr := `select hostname  from hostlist where hostid = ?`
+	if err := db.Get(hostname, sqlStr, hostid); err != nil {
+		return
+	}
+
+	return
+}
+func HostOnwer(hostid string) (hostowner string) {
+	sqlStr := `select hostowner  from hostlist where hostid = ?`
+	if err := db.Get(hostowner, sqlStr, hostid); err != nil {
+		return
+	}
+
+	return
+}
 func Hostedit(host *models.ParamHostDateGet) (n int64, err error) {
 	sqlStr := "update hostlist set hostname=?,systemtype=?,hoststatus=?,hostip=?,hostlocation=?,hostowner=?,hostnote=? where hostid=?"
 	ret, err := db.Exec(sqlStr,
@@ -64,14 +80,32 @@ func Hostedit(host *models.ParamHostDateGet) (n int64, err error) {
 	} else {
 		fmt.Printf("更新数据为 %d 条\n", n)
 	}
+	clinet := models.SystemLog{
+		SystemlogHostName:  host.HostName,
+		SystemlogType:      "修改主机信息",
+		SystemlogInfo:      sqlStr,
+		SystemlogStartTime: todaytime.NowTimeFull(),
+		SystemlogHostOnwer: host.HostOwner,
+	}
+	if err == nil {
+		clinet.SystemlogNote = "成功"
+	} else {
+		clinet.SystemlogNote = err.Error()
+	}
+	_, err = SystemLogInsert(clinet)
+	if err != nil {
+		return
+	}
 	return
 
 }
 
 func Hostadd(host *models.ParamHostDateGet) (theId int64, err error) {
+
 	hosttime, _ := strconv.ParseInt(host.HostAddTime, 10, 64)
 	hostidadd := snowflake.IdNum()
 	addtime := time.Unix(hosttime/1000, 0).Format(timeLayoutday) + todaytime.NowTime()
+
 	sqlStr := "insert into hostlist(hostid,hostname,systemtype,hoststatus,hostip,hostlocation,hostowner,hostnote,hostaddtime) values (?,?,?,?,?,?,?,?,?)"
 	ret, err := db.Exec(sqlStr,
 		hostidadd,
@@ -92,23 +126,39 @@ func Hostadd(host *models.ParamHostDateGet) (theId int64, err error) {
 	} else {
 		fmt.Printf("主机表插入数据的id 为 %d. \n", theId)
 	}
+	clinet := models.SystemLog{
+		SystemlogHostName:  host.HostName,
+		SystemlogType:      "添加主机",
+		SystemlogInfo:      sqlStr,
+		SystemlogStartTime: addtime,
+		SystemlogHostOnwer: host.HostOwner,
+	}
 	var alarmtype = 4011
-	sqlStrAlarm := "insert into alarmsetting(hostid,alarmtype,alarmstatus,alarmowner) values (?,?,?,?)"
+	sqlStrAlarm := "insert into alarmsetting(hostid,alarmtype,alarmstatus,alarmhostonwer) values (?,?,?,?)"
 	ret, err = db.Exec(sqlStrAlarm, hostidadd, alarmtype, 1, host.HostOwner)
 	if err != nil {
 		return
 	}
 	theId, err = ret.LastInsertId()
 	if err != nil {
+
 		return theId, err
 	} else {
 		fmt.Printf("主机设置表插入数据的id 为 %d. \n", theId)
+	}
+	if err == nil {
+		clinet.SystemlogNote = "成功"
+	} else {
+		clinet.SystemlogNote = err.Error()
+	}
+	_, err = SystemLogInsert(clinet)
+	if err != nil {
+		return
 	}
 	return
 
 }
 func Hostdel(host *models.ParamHostDateGet) (n int64, err error) {
-
 	sqlStr := "delete  from hostlist where hostid=?"
 	ret, err := db.Exec(sqlStr, host.Hostid)
 	if err != nil {
@@ -119,6 +169,22 @@ func Hostdel(host *models.ParamHostDateGet) (n int64, err error) {
 		return
 	} else {
 		fmt.Printf("主机表删除数据为 %d 条\n", n)
+	}
+	clinet := models.SystemLog{
+		SystemlogHostName:  HostName(strconv.FormatInt(host.Hostid, 10)),
+		SystemlogType:      "删除主机",
+		SystemlogInfo:      sqlStr,
+		SystemlogStartTime: todaytime.NowTimeFull(),
+		SystemlogHostOnwer: HostOnwer(strconv.FormatInt(host.Hostid, 10)),
+	}
+	if err == nil {
+		clinet.SystemlogNote = "成功"
+	} else {
+		clinet.SystemlogNote = err.Error()
+	}
+	_, err = SystemLogInsert(clinet)
+	if err != nil {
+		return
 	}
 	return
 

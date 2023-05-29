@@ -5,9 +5,11 @@ import (
 	"go-web-app/models"
 	"go-web-app/pkg/snowflake"
 	"go-web-app/pkg/todaytime"
+	"strconv"
 )
 
 func AlarmAdd(host *models.ParamAlarmSetting) (theId int64, err error) {
+
 	sqlStr := "insert into alarmstatistics(alarmid,hostid,alarmstatus,alarmtype,alarminfo,alarmnote,alarmstarttime) values (?,?,?,?,?,?,?)"
 	ret, err := db.Exec(sqlStr,
 		snowflake.IdNum(),
@@ -17,6 +19,22 @@ func AlarmAdd(host *models.ParamAlarmSetting) (theId int64, err error) {
 		host.AlarmInfo,
 		host.AlarmNote,
 		todaytime.NowTimeFull())
+	if err != nil {
+		return
+	}
+	clinet := models.SystemLog{
+		SystemlogHostName:  HostName(strconv.FormatInt(host.Alarmid, 10)),
+		SystemlogType:      "新增报警",
+		SystemlogInfo:      sqlStr,
+		SystemlogStartTime: todaytime.NowTimeFull(),
+		SystemlogHostOnwer: host.AlarmHostOnwer,
+	}
+	if err == nil {
+		clinet.SystemlogNote = "成功"
+	} else {
+		clinet.SystemlogNote = err.Error()
+	}
+	_, err = SystemLogInsert(clinet)
 	if err != nil {
 		return
 	}
@@ -49,6 +67,21 @@ func AlarmUpdateNoti(host *models.ParamAlarmSetting) (n int64, err error) {
 		fmt.Println(err)
 		return
 	}
+	clinet := models.SystemLog{
+		SystemlogHostName:  "所有主机",
+		SystemlogType:      "修改报警媒介",
+		SystemlogInfo:      sqlStr,
+		SystemlogStartTime: todaytime.NowTimeFull(),
+	}
+	if err == nil {
+		clinet.SystemlogNote = "成功"
+	} else {
+		clinet.SystemlogNote = err.Error()
+	}
+	_, err = SystemLogInsert(clinet)
+	if err != nil {
+		return
+	}
 	n, err = ret.RowsAffected()
 	if err != nil {
 		fmt.Println(err)
@@ -68,6 +101,21 @@ func AlarmUpdateThreshold(host *models.ParamAlarmSetting) (n int64, err error) {
 	)
 	if err != nil {
 		fmt.Println(err)
+		return
+	}
+	clinet := models.SystemLog{
+		SystemlogHostName:  "所有主机",
+		SystemlogType:      "修改报警阈值",
+		SystemlogInfo:      sqlStr,
+		SystemlogStartTime: todaytime.NowTimeFull(),
+	}
+	if err == nil {
+		clinet.SystemlogNote = "成功"
+	} else {
+		clinet.SystemlogNote = err.Error()
+	}
+	_, err = SystemLogInsert(clinet)
+	if err != nil {
 		return
 	}
 	n, err = ret.RowsAffected()
@@ -90,6 +138,22 @@ func AlarmEdit(host *models.ParamAlarmSetting) (n int64, err error) {
 	)
 	if err != nil {
 		fmt.Println(err)
+		return
+	}
+	clinet := models.SystemLog{
+		SystemlogType:      "报警更新",
+		SystemlogInfo:      sqlStr,
+		SystemlogStartTime: todaytime.NowTimeFull(),
+		SystemlogHostOnwer: host.AlarmHostOnwer,
+	}
+	clinet.SystemlogHostName = host.AlarmHostName
+	if err == nil {
+		clinet.SystemlogNote = "成功"
+	} else {
+		clinet.SystemlogNote = err.Error()
+	}
+	_, err = SystemLogInsert(clinet)
+	if err != nil {
 		return
 	}
 	n, err = ret.RowsAffected()

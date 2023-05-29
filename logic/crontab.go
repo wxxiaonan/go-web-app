@@ -73,19 +73,30 @@ func Crond(p *models.ParameCrontab) (Reply interface{}, err error) {
 		}
 		return Reply, err
 	case p.ParameOption == "taskjoblog":
-		fmt.Println(p.ParameOption)
 		Reply, err := mysql.TaskJobLog(p)
 		if err != nil {
 			return Reply, err
 		}
 		return Reply, err
 	case p.ParameOption == "taskjobselect":
-		fmt.Println(p.ParameOption)
 		Reply, err := mysql.TaskJobLogSelect(p)
 		if err != nil {
 			return Reply, err
 		}
 		return Reply, err
+	case p.ParameOption == "logmsgget":
+		Reply, err := mysql.LogmsgGet(p)
+		if err != nil {
+			return Reply, err
+		}
+		return Reply, err
+	case p.ParameOption == "logmsgsystem":
+		Reply, err := mysql.SystemLogGet(p)
+		if err != nil {
+			return Reply, err
+		}
+		return Reply, err
+
 	}
 
 	return
