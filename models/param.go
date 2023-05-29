@@ -71,18 +71,18 @@ type Alarmlist struct {
 	AlarmHostIp    string `json:"alarmhostip"`
 }
 type Hostlist struct {
-	Hostid         int64  `json:"hostid"`
-	HostName       string `json:"hostname" bindding:"required"`
-	SystemType     string `json:"systemtype" bindding:"required"`
-	HostStatus     int    `json:"hoststatus" bindding:"required"`
-	HostIP         string `json:"hostip" bindding:"required"`
-	HostLocation   string `json:"hostlocation" bindding:"required"`
-	HostOwner      string `json:"hostowner" bindding:"required"`
-	HostAddTime    string `json:"hostaddtime" bindding:"required"`
-	HostNote       string `json:"hostnote" bindding:"required"`
-	HostSystemInfo string `json:"hostsysteminfo"`
-	HostUptime     string `json:"hostuptime"`
-	HostIssues     int    `json:"hostissues"`
+	Hostid         int64   `json:"hostid"`
+	HostName       string  `json:"hostname" bindding:"required"`
+	SystemType     string  `json:"systemtype" bindding:"required"`
+	HostStatus     int     `json:"hoststatus" bindding:"required"`
+	HostIP         string  `json:"hostip" bindding:"required"`
+	HostLocation   string  `json:"hostlocation" bindding:"required"`
+	HostOwner      string  `json:"hostowner" bindding:"required"`
+	HostAddTime    string  `json:"hostaddtime" bindding:"required"`
+	HostNote       string  `json:"hostnote" bindding:"required"`
+	HostSystemInfo string  `json:"hostsysteminfo"`
+	HostUptime     *string `json:"hostuptime"`
+	HostIssues     int     `json:"hostissues"`
 }
 
 type NotiAPI struct {
