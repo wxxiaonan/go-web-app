@@ -114,7 +114,36 @@ func Crond(p *models.ParameCrontab) (Reply interface{}, err error) {
 			return Reply, err
 		}
 		return Reply, err
-
+	case p.ParameOption == "systemlogclean":
+		Reply, err := mysql.LogClean("systemlog")
+		if err != nil {
+			return Reply, err
+		}
+		return Reply, err
+	case p.ParameOption == "uploadlogclean":
+		Reply, err := mysql.LogClean("filedata")
+		if err != nil {
+			return Reply, err
+		}
+		return Reply, err
+	case p.ParameOption == "alarmlogclean":
+		Reply, err := mysql.LogClean("alarmstatistics")
+		if err != nil {
+			return Reply, err
+		}
+		return Reply, err
+	case p.ParameOption == "tasklogclean":
+		Reply, err := mysql.LogClean("jobdata")
+		if err != nil {
+			return Reply, err
+		}
+		return Reply, err
+	case p.ParameOption == "sshshell":
+		Reply, err := mysql.SshShell(p)
+		if err != nil {
+			return Reply, err
+		}
+		return Reply, err
 	}
 
 	return

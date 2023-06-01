@@ -100,6 +100,7 @@ type ParameCrontab struct {
 	JobMgr       `json:"jobmgr"`
 	SystemLog    `json:"systemlog"`
 	Filelog      `json:"filelog"`
+	SshTool      `json:"sshtool"`
 }
 
 type Job struct {
@@ -150,4 +151,12 @@ type FileOption struct {
 	FileInfo   string `json:"fileinfo"`
 	FileOption string `json:"fileoption"`
 	OptionTime string `json:"optiontime"`
+}
+
+type SshTool struct {
+	UserName string `json:"username"`
+	Password string `json:"password"`
+	Address  string `json:"address"`
+	Port     int    `json:"port"`
+	Shell    string `json:"shell"`
 }
