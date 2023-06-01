@@ -20,8 +20,14 @@ type AppConfig struct {
 	*MySQLConfig `mapstructure:"mysql"`
 	*RedisConfig `mapstructure:"redis"`
 	*EtcdConfig  `mapstructure:"etcd"`
+	*FileConfig  `mapstructure:"file"`
 }
-
+type FileConfig struct {
+	Filemaxsize int64  `mapstructure:"filemaxsize"`
+	Savedir     string `mapstructure:"savedir"`
+	Httpurl     string `mapstructure:"httpurl"`
+	Httpdir     string `mapstructure:"httpdir"`
+}
 type LogConfig struct {
 	Level      string `mapstructure:"level"`
 	Filename   string `mapstructure:"filename"`

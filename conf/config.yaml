@@ -32,5 +32,9 @@ etcd:
   username: "root"
   password: "sinfotek"
   dialtiemeout: 3000
-
+file:
+  filemaxsize: 2048
+  savedir: "./static/upload/"
+  httpurl: "http://127.0.0.1:8081"
+  httpdir: "/static"
 

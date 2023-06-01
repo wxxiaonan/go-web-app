@@ -96,6 +96,24 @@ func Crond(p *models.ParameCrontab) (Reply interface{}, err error) {
 			return Reply, err
 		}
 		return Reply, err
+	case p.ParameOption == "logmsgfile":
+		Reply, err := mysql.FileLogGet(p)
+		if err != nil {
+			return Reply, err
+		}
+		return Reply, err
+	case p.ParameOption == "fileremove":
+		Reply, err := mysql.FileLogDel(p)
+		if err != nil {
+			return Reply, err
+		}
+		return Reply, err
+	case p.ParameOption == "logoption":
+		Reply, err := mysql.FileOptionLogGet(p)
+		if err != nil {
+			return Reply, err
+		}
+		return Reply, err
 
 	}
 

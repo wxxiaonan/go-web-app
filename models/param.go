@@ -99,6 +99,7 @@ type ParameCrontab struct {
 	Job          `json:"job"`
 	JobMgr       `json:"jobmgr"`
 	SystemLog    `json:"systemlog"`
+	Filelog      `json:"filelog"`
 }
 
 type Job struct {
@@ -133,4 +134,20 @@ type SystemLog struct {
 	SystemlogNote      string `json:"systemlognote"`
 	SystemlogStartTime string `json:"systemlogstarttime"`
 	SystemlogHostOnwer string `json:"systemloghostonwer"`
+}
+
+type Filelog struct {
+	FileName   string `json:"filename"`
+	FileId     int64  `json:"fileid"`
+	Uploadtime string `json:"uploadtime"`
+	FileSize   int64  `json:"filesize"`
+	FileDir    string `json:"filedir"`
+}
+
+type FileOption struct {
+	FileId     int64  `json:"fileid"`
+	FileName   string `json:"filename"`
+	FileInfo   string `json:"fileinfo"`
+	FileOption string `json:"fileoption"`
+	OptionTime string `json:"optiontime"`
 }
