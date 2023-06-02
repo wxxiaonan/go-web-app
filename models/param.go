@@ -134,7 +134,6 @@ type SystemLog struct {
 	SystemlogInfo      string `json:"systemloginfo"`
 	SystemlogNote      string `json:"systemlognote"`
 	SystemlogStartTime string `json:"systemlogstarttime"`
-	SystemlogHostOnwer string `json:"systemloghostonwer"`
 }
 
 type Filelog struct {

@@ -158,7 +158,6 @@ func CrontabAdd(client *models.ParameCrontab) (Reply int64, err error) {
 		SystemlogType:      "新增定时任务",
 		SystemlogInfo:      sqlStr,
 		SystemlogStartTime: todaytime.NowTimeFull(),
-		SystemlogHostOnwer: "管理员",
 	}
 	if err == nil {
 		clinet.SystemlogNote = "成功"
@@ -196,7 +195,6 @@ func CrontabDel(client *models.ParameCrontab) (Reply int64, err error) {
 		SystemlogType:      "删除定时任务",
 		SystemlogInfo:      sqlStr,
 		SystemlogStartTime: todaytime.NowTimeFull(),
-		SystemlogHostOnwer: "管理员",
 	}
 	if err == nil {
 		clinet.SystemlogNote = "成功"
@@ -235,7 +233,6 @@ func CrontabEdit(client *models.ParameCrontab) (Reply int64, err error) {
 		SystemlogType:      "修改定时任务",
 		SystemlogInfo:      sqlStr,
 		SystemlogStartTime: todaytime.NowTimeFull(),
-		SystemlogHostOnwer: "管理员",
 	}
 	if err == nil {
 		clinet.SystemlogNote = "成功"

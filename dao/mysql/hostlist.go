@@ -43,15 +43,7 @@ func Hostinfo(host *models.ParamHostDateGet) (hostgetdata interface{}, err error
 }
 func HostName(hostid string) (hostname string) {
 	sqlStr := `select hostname  from hostlist where hostid = ?`
-	if err := db.Get(hostname, sqlStr, hostid); err != nil {
-		return
-	}
-
-	return
-}
-func HostOnwer(hostid string) (hostowner string) {
-	sqlStr := `select hostowner  from hostlist where hostid = ?`
-	if err := db.Get(hostowner, sqlStr, hostid); err != nil {
+	if err := db.Get(&hostname, sqlStr, hostid); err != nil {
 		return
 	}
 
@@ -85,7 +77,6 @@ func Hostedit(host *models.ParamHostDateGet) (n int64, err error) {
 		SystemlogType:      "修改主机信息",
 		SystemlogInfo:      sqlStr,
 		SystemlogStartTime: todaytime.NowTimeFull(),
-		SystemlogHostOnwer: host.HostOwner,
 	}
 	if err == nil {
 		clinet.SystemlogNote = "成功"
@@ -131,7 +122,6 @@ func Hostadd(host *models.ParamHostDateGet) (theId int64, err error) {
 		SystemlogType:      "添加主机",
 		SystemlogInfo:      sqlStr,
 		SystemlogStartTime: addtime,
-		SystemlogHostOnwer: host.HostOwner,
 	}
 	var alarmtype = 4011
 	sqlStrAlarm := "insert into alarmsetting(hostid,alarmtype,alarmstatus,alarmhostonwer) values (?,?,?,?)"
@@ -160,22 +150,11 @@ func Hostadd(host *models.ParamHostDateGet) (theId int64, err error) {
 }
 func Hostdel(host *models.ParamHostDateGet) (n int64, err error) {
 	sqlStr := "delete  from hostlist where hostid=?"
-	ret, err := db.Exec(sqlStr, host.Hostid)
-	if err != nil {
-		return
-	}
-	n, err = ret.RowsAffected()
-	if err != nil {
-		return
-	} else {
-		fmt.Printf("主机表删除数据为 %d 条\n", n)
-	}
 	clinet := models.SystemLog{
 		SystemlogHostName:  HostName(strconv.FormatInt(host.Hostid, 10)),
 		SystemlogType:      "删除主机",
 		SystemlogInfo:      sqlStr,
 		SystemlogStartTime: todaytime.NowTimeFull(),
-		SystemlogHostOnwer: HostOnwer(strconv.FormatInt(host.Hostid, 10)),
 	}
 	if err == nil {
 		clinet.SystemlogNote = "成功"
@@ -185,6 +164,17 @@ func Hostdel(host *models.ParamHostDateGet) (n int64, err error) {
 	_, err = SystemLogInsert(clinet)
 	if err != nil {
 		return
+	}
+
+	ret, err := db.Exec(sqlStr, host.Hostid)
+	if err != nil {
+		return
+	}
+	n, err = ret.RowsAffected()
+	if err != nil {
+		return
+	} else {
+		fmt.Printf("主机表删除数据为 %d 条\n", n)
 	}
 	return
 

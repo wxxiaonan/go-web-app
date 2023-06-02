@@ -27,7 +27,6 @@ func AlarmAdd(host *models.ParamAlarmSetting) (theId int64, err error) {
 		SystemlogType:      "新增报警",
 		SystemlogInfo:      sqlStr,
 		SystemlogStartTime: todaytime.NowTimeFull(),
-		SystemlogHostOnwer: host.AlarmHostOnwer,
 	}
 	if err == nil {
 		clinet.SystemlogNote = "成功"
@@ -144,7 +143,6 @@ func AlarmEdit(host *models.ParamAlarmSetting) (n int64, err error) {
 		SystemlogType:      "报警更新",
 		SystemlogInfo:      sqlStr,
 		SystemlogStartTime: todaytime.NowTimeFull(),
-		SystemlogHostOnwer: host.AlarmHostOnwer,
 	}
 	clinet.SystemlogHostName = host.AlarmHostName
 	if err == nil {
