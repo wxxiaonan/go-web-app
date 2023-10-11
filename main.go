@@ -19,7 +19,7 @@ import (
 	"time"
 )
 
-// Go Web开发比较通用的脚手架模板
+// Go Web开发比较通用的脚手架模板修改
 
 func main() {
 	var appConfigpath string
