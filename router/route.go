@@ -19,7 +19,7 @@ func Setup(mode, ClientUrl string, size int64, savedir string) *gin.Engine {
 	r.Use(middlewares.Cors(ClientUrl))
 	r.Use(logger.GinLogger(), logger.GinRecovery(true))
 	r.MaxMultipartMemory = size << 20
-	//注册业务路由
+	//注册业务路由1·1··
 	r.POST("/signup", controller.SignUpHandler)
 	r.POST("/login", controller.LoginHandler)
 
